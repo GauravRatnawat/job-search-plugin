@@ -1,0 +1,31 @@
+# Cache and data
+.cache/
+*.xlsx
+*.xlsx.lock
+job_tracker.lock
+.state/
+application_drafts/
+
+# Python
+__pycache__/
+scripts/__pycache__/
+*.pyc
+.pytest_cache/
+*.egg-info/
+dist/
+build/
+
+# Environment
+.env
+
+# IDE
+.idea/
+
+# gstack
+.gstack/
+
+# OS
+.DS_Store
+
+# Planning / internal
+PLAN.md

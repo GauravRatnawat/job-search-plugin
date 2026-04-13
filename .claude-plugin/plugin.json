@@ -1,0 +1,11 @@
+{
+  "name": "job-search",
+  "description": "AI recruiter and job hunting assistant. Analyzes resumes, proactively hunts for jobs via web search, scores every match /100, and delivers prioritized application lists with verified links. Includes resume tailoring, cover letter writing, interview prep, application tracking, and multi-persona pipeline caching.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Gaurav Ratnawat"
+  },
+  "homepage": "https://github.com/gaurav-ratnawat/job-search-plugin",
+  "repository": "https://github.com/gaurav-ratnawat/job-search-plugin",
+  "license": "MIT"
+}
