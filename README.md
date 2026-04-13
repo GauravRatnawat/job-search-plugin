@@ -2,20 +2,20 @@
 
 An **AI recruiter and job hunting assistant** that works with any AI coding agent. Analyzes resumes in depth, proactively hunts for jobs via web search, scores every match with fit scores out of 100, and delivers prioritized application lists with verified links.
 
+**No dependencies. No setup. No API keys.** Pure skill instructions + native file I/O.
+
 ## How to Use
 
 This repo supports multiple AI platforms. Pick the one you use:
 
 | Platform | Entry Point | Setup |
 |----------|-------------|-------|
-| **Codex** | Open the repo in Codex. It reads `AGENTS.md` automatically. | `pip install -r scripts/requirements.txt` |
-| **Claude Code (standalone)** | Clone the repo and open it. Claude reads `CLAUDE.md` + `.claude/commands/`. | `pip install -r scripts/requirements.txt` |
-| **Claude Code (plugin)** | `claude plugin install job-search` or `claude --plugin-dir /path/to/repo` | Auto-installed via hooks |
-| **Claude Projects** | Paste `plugin.md` into project knowledge. | `pip install -r scripts/requirements.txt` |
-| **Claude Code (skill)** | `ln -sf /path/to/repo/skill ~/.claude/skills/job-search` | `pip install -r scripts/requirements.txt` |
-| **Cursor / Copilot / Other** | Open the repo. The agent reads `AGENTS.md`. | `pip install -r scripts/requirements.txt` |
-
-**Prerequisites:** Python 3.8+
+| **Codex** | Open the repo in Codex. It reads `AGENTS.md` automatically. | None |
+| **Claude Code (standalone)** | Clone the repo and open it. Claude reads `CLAUDE.md` + `.claude/commands/`. | None |
+| **Claude Code (plugin)** | `claude plugin install job-search` or `claude --plugin-dir /path/to/repo` | None |
+| **Claude Projects** | Paste `plugin.md` into project knowledge. | None |
+| **Claude Code (skill)** | `ln -sf /path/to/repo/skill ~/.claude/skills/job-search` | None |
+| **Cursor / Copilot / Other** | Open the repo. The agent reads `AGENTS.md`. | None |
 
 ## What It Does
 
@@ -38,36 +38,34 @@ For Codex and other agents, just ask in natural language.
 | `tailor-resume <job>` | Rewrite resume for a specific job from the scored list |
 | `cover-letter <job>` | Write a personalized cover letter (<400 words) |
 | `interview-prep <company>` | Generate behavioral + technical questions with STAR frameworks |
-| `tracker <command>` | Manage Excel tracker: save, view, update, summary |
-| `apply <job_id or url>` | Inspect and submit supported applications |
+| `tracker <command>` | Manage tracker: save, view, update, summary |
+| `apply <job_id or url>` | Help with an application (provide URL, draft email) |
 
 ## Pipeline Cache
 
-Results are cached per-persona between sessions to avoid re-parsing resumes and re-searching:
+Results are cached per-persona between sessions as JSON files in `.cache/<persona>/`:
 
-```bash
-# Claude Code plugin users
-job-cache status
+| File | TTL | Content |
+|------|-----|---------|
+| `profile.json` | 30 days | Parsed resume profile |
+| `search_strategy.json` | 7 days | Generated search queries |
+| `search_results.json` | 2 days | Raw job listings |
+| `scored_jobs.json` | 2 days | Scored and ranked results |
 
-# Standalone / Codex users
-python scripts/cache.py status
-```
+Each candidate gets isolated cache storage. The persona slug is derived from the profile name. The agent reads and writes these files directly.
 
-Stages: `profile` (30d TTL), `search_strategy` (7d), `search_results` (2d), `scored_jobs` (2d).
+## Application Support
 
-Each candidate gets isolated cache storage. The persona slug is auto-derived from the profile name. Switch between candidates with `use <name>`.
-
-## Application Automation
-
-Supports:
-- Email draft generation (`.eml` files you send yourself)
-- Greenhouse-hosted application submission
+The agent helps you apply by:
+- Providing direct application URLs
+- Showing your profile details for easy copy-pasting
+- Drafting email applications as local text files
+- Suggesting tailored resumes and cover letters for each role
 
 Guardrails:
-- Email targets create local drafts only
-- Only Greenhouse real submissions require `--confirm`
-- LinkedIn and Indeed are blocked
-- Updates the tracker to `Applied` after a successful submission
+- NEVER submits applications on your behalf
+- NEVER auto-applies to LinkedIn or Indeed
+- Email applications create local drafts only
 
 ## Scoring System
 
@@ -82,22 +80,6 @@ Guardrails:
 ## Project Structure
 
 ```
-.claude-plugin/
-  plugin.json                    Plugin manifest (Claude Code plugin)
-.claude/commands/                Slash commands (standalone Claude Code)
-  input-resume.md
-  tailor-resume.md
-  cover-letter.md
-  interview-prep.md
-  tracker.md
-  apply.md
-commands/                        Slash commands (Claude Code plugin)
-  input-resume.md
-  tailor-resume.md
-  cover-letter.md
-  interview-prep.md
-  tracker.md
-  apply.md
 skills/                          9 AI skills (pipeline steps)
   resume-parser/SKILL.md
   job-hunter/SKILL.md
@@ -108,21 +90,15 @@ skills/                          9 AI skills (pipeline steps)
   resume-tailor/SKILL.md
   cover-letter-writer/SKILL.md
   interview-prep/SKILL.md
-bin/                             CLI wrappers (auto-added to PATH by plugin)
-  job-tracker                    Excel tracker I/O
-  job-apply                      Application helper
-  job-cache                      Pipeline cache manager
-hooks/
-  hooks.json                     Auto-install Python deps on session start
-scripts/                         Python implementations
-  tracker.py
-  apply.py
-  cache.py
-  requirements.txt
+.claude/commands/                Slash commands (standalone Claude Code)
+commands/                        Slash commands (Claude Code plugin)
+.claude-plugin/plugin.json       Plugin manifest
 skill/SKILL.md                   Installable Claude Code skill
 AGENTS.md                        Codex / generic agent instructions
 CLAUDE.md                        Standalone Claude Code instructions
 plugin.md                        Claude Projects orchestrator
+.cache/                          Pipeline cache (gitignored)
+job_tracker.json                 Application tracker (gitignored)
 ```
 
 ## License

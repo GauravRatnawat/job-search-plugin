@@ -2,17 +2,15 @@ Tailor the candidate's resume for: $ARGUMENTS
 
 Read `skills/resume-tailor/SKILL.md` and follow its full instructions.
 
-**Get the candidate's profile** from the pipeline cache (uses active persona):
-```bash
-job-cache load profile
-```
+**Get the candidate's profile** from the pipeline cache:
+
+Read `.cache/active_persona.txt` to get the persona slug, then read `.cache/<persona>/profile.json` and use the `data` field.
+
 If no cached profile exists, ask the user to share their resume first (or run `/input-resume <path>`).
-To use a different person's data: `job-cache load profile -p <persona>`
 
 **Get the scored job list** (to resolve job references by number/company):
-```bash
-job-cache load scored_jobs
-```
+
+Read `.cache/<persona>/scored_jobs.json` and use the `data` field.
 
 Identify the target job from the argument — it can be a job number from the scored list, a company name, a job title, or a URL. If ambiguous, ask which job they mean.
 

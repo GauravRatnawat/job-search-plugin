@@ -2,6 +2,8 @@
 
 This project is an AI recruiter workflow for Claude Code. Codex and other agents should use `AGENTS.md`.
 
+**No dependencies, no setup, no API keys.** Everything is done through Claude's native file read/write and web search capabilities.
+
 ## Commands
 
 | Command | What It Does |
@@ -10,8 +12,8 @@ This project is an AI recruiter workflow for Claude Code. Codex and other agents
 | `/tailor-resume <job>` | Rewrite resume for a specific job from the scored list |
 | `/cover-letter <job>` | Write a personalized cover letter (<400 words) |
 | `/interview-prep <company/role>` | Generate 5 behavioral + 5 technical questions with answer frameworks |
-| `/tracker <command>` | Manage Excel tracker: save, view, update, summary |
-| `/apply <job_id or url>` | Inspect and submit a supported application (email draft or Greenhouse) |
+| `/tracker <command>` | Manage job tracker: save, view, update, summary |
+| `/apply <job_id or url>` | Look up a job and help the user apply |
 
 ## Quick Start
 
@@ -19,45 +21,24 @@ This project is an AI recruiter workflow for Claude Code. Codex and other agents
 2. Claude runs: resume analysis, web job search, scoring, prioritized list
 3. Use follow-up commands for tailoring, cover letters, interview prep, tracking, or applying
 
-On subsequent runs, cached data is reused automatically. Check with:
-```bash
-python scripts/cache.py status
-```
+On subsequent runs, cached data is reused automatically from `.cache/`.
 
 ## Pipeline Cache
 
-Results are cached per-persona between runs to avoid re-parsing resumes and re-searching for jobs:
+Results are cached per-persona between runs in `.cache/<persona>/` as JSON files:
 
-```bash
-python scripts/cache.py status                    # What's cached for active persona?
-python scripts/cache.py load <stage>              # Load cached data
-python scripts/cache.py save <stage> '<json>'     # Save stage data (auto-derives persona from profile name)
-python scripts/cache.py clear [stage]             # Clear one or all stages
-python scripts/cache.py personas                  # List all personas
-python scripts/cache.py use <name>                # Switch active persona
-```
+| File | TTL | What It Stores |
+|------|-----|---------------|
+| `profile.json` | 30 days | Parsed resume: skills, experience, target roles |
+| `search_strategy.json` | 7 days | Generated search queries and board list |
+| `search_results.json` | 2 days | Raw job listings from web searches |
+| `scored_jobs.json` | 2 days | Scored and ranked job list |
 
-Stages: `profile` (30d TTL), `search_strategy` (7d), `search_results` (2d), `scored_jobs` (2d).
+Each file is a JSON object with `cached_at` (ISO timestamp) and `data` (the payload). The active persona slug is stored in `.cache/active_persona.txt`.
 
-## Tracker Script
+## Tracker
 
-```bash
-python scripts/tracker.py save '[{...}]'
-python scripts/tracker.py view
-python scripts/tracker.py view --status Applied
-python scripts/tracker.py update <id> Applied --notes "..."
-python scripts/tracker.py summary
-```
-
-Tracker file: `./job_tracker.xlsx`
-
-## Setup
-
-```bash
-pip install -r scripts/requirements.txt   # openpyxl + filelock
-```
-
-No API keys required. Web search and file reading are Claude's built-in capabilities.
+The job tracker is a JSON file at `job_tracker.json`. See `skills/application-tracker/SKILL.md` for the full schema. Claude reads and writes this file directly.
 
 ## Project Structure
 
@@ -73,14 +54,11 @@ skills/                     9 skill instruction documents
   resume-tailor/SKILL.md
   cover-letter-writer/SKILL.md
   interview-prep/SKILL.md
-scripts/                    Python helper scripts
-  cache.py                  Pipeline cache (save/load/status/clear)
-  tracker.py                Excel tracker (save/view/update/summary)
-  apply.py                  Application helper (email drafts + Greenhouse)
 skill/SKILL.md              Installable Claude Code skill (orchestrator)
 AGENTS.md                   Codex / generic agent instructions
 plugin.md                   Claude Projects orchestrator
 .cache/                     Cached pipeline state (gitignored)
+job_tracker.json            Application tracker (gitignored)
 ```
 
 ## Install as Skill
