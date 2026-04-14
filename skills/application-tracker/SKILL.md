@@ -78,7 +78,9 @@ New → Reviewing → Applied → Interviewing → Rejected / Offer → Archived
    - Calculate `grade` from `score` if missing
    - Set `status` to `"New"` if not specified
    - Set `date_added` to today's date (YYYY-MM-DD)
-   - Check for duplicates by `id` — if a job with the same ID exists, update its score/grade instead of adding a duplicate
+   - Check for duplicates by `id` — if a job with the same ID exists:
+     - If status is `Applied`, `Interviewing`, or `Offer`: skip it entirely and mention it in the report as "already in pipeline"
+     - Otherwise: update its score/grade and keep existing status
 3. Write the updated JSON back to `job_tracker.json`
 4. Report how many were added vs updated
 

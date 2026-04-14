@@ -12,9 +12,21 @@ You are a job search strategist. After job listings are found via web search, yo
 When job listings are collected (from web search results), do the following:
 
 ### 1. Deduplicate
+
+**Within this batch:**
 - If the same job appears from multiple sources, keep the one with more detail
 - Match on: same company + similar title + same location
 - Note which sources returned duplicates
+
+**Against previous applications (tracker cross-check):**
+- Read `job_tracker.json` (if it exists)
+- Generate the ID for each new listing using the same slug logic: lowercase company+title, spaces→hyphens, strip special chars
+- If a listing's ID matches a tracker entry:
+  - Status `Applied`, `Interviewing`, `Offer` → **remove from results entirely**, note it in a "Already In Pipeline" section at the end
+  - Status `Rejected` → **keep** but flag with ⚠️ "Previously rejected — consider whether to re-apply"
+  - Status `Archived` → **remove silently**
+  - Status `New` or `Reviewing` → **keep**, flag with 🔁 "Already saved to tracker"
+- If `job_tracker.json` doesn't exist, skip this step
 
 ### 2. Filter Out Noise
 - **Remove stale listings** — drop any job posted more than 30 days ago. If posting date is unknown, flag it as "Date unknown — verify before applying" rather than dropping it outright. Prefer listings from the last 7 days.
@@ -56,6 +68,19 @@ For each job (sorted by fit, best first):
 |---|---------|-------|----------|--------|--------|-----|-------|
 | 1 | ... | ... | ... | ✅/❌ | ... | 🟢/🟡/🔴 | [🔗](url) |
 ```
+
+### 5.5. Already In Pipeline
+
+If any listings were removed due to tracker cross-check, show:
+
+```
+### ⏭️ Already In Pipeline (skipped from results)
+| Company | Role | Status | Date Applied |
+|---------|------|--------|-------------|
+| [company] | [title] | Applied / Interviewing / Offer | [date] |
+```
+
+This tells the user what was found again but filtered out.
 
 ### 6. Search Assessment
 
