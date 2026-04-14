@@ -24,14 +24,17 @@ everything is done through native file read/write and web search.
 
 ## Slash Commands Available
 
+> **Installed as a skill?** Commands are namespaced: use `/job-search:input-resume`, `/job-search:tailor-resume`, etc.
+> **Running standalone (repo opened directly)?** Use `/input-resume`, `/tailor-resume`, etc.
+
 | Command | What It Does |
 |---------|-------------|
-| `/input-resume <path or text>` | Full pipeline: parse resume, hunt jobs, score, deliver 20+ results |
-| `/tailor-resume <job>` | Rewrite resume for a specific job |
-| `/cover-letter <job>` | Write a personalized cover letter |
-| `/interview-prep <company/role>` | Generate interview Q&A + talking points |
-| `/tracker <command>` | Save/view/update/summary for the JSON tracker |
-| `/apply <job_id or url>` | Help the user apply (provide URL, draft email) |
+| `input-resume <path or text>` | Full pipeline: parse resume, hunt jobs, score, deliver 20+ results |
+| `tailor-resume <job>` | Rewrite resume for a specific job |
+| `cover-letter <job>` | Write a personalized cover letter |
+| `interview-prep <company/role>` | Generate interview Q&A + talking points |
+| `tracker <command>` | Save/view/update/summary for the JSON tracker |
+| `apply <job_id or url>` | Help the user apply (provide URL, draft email) |
 
 ---
 
@@ -72,9 +75,14 @@ Each file structure:
 ```json
 {
   "cached_at": "2025-01-15T10:30:00",
+  "schema_version": "1",
   "data": { ... }
 }
 ```
+
+**Freshness check:** A cache file is fresh if `(now_UTC - cached_at) < TTL`. Parse `cached_at`
+as ISO 8601, compute the difference in hours, and compare against the TTL. If the file is
+missing, unreadable, has no `cached_at`, or `schema_version` != "1", treat it as stale.
 
 **Always check cache first** before starting any pipeline step. If fresh cached data exists,
 read the file and use it instead of re-running that step. Each persona's data is isolated.

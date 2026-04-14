@@ -130,7 +130,7 @@ If web search results are insufficient (< 20 jobs), supplement by providing dire
 
 ## Step 4: Curate & Present
 
-After collecting all results, curate a list of **at least 20 jobs** with:
+After collecting all results, curate a list of **at least 20 jobs**. Do NOT score jobs here — scoring happens in the Job Scorer skill step. Categorize based on quick preliminary assessment of skill/experience fit.
 
 ```
 ## 🎯 Curated Job List for [Candidate Name]
@@ -141,29 +141,31 @@ After collecting all results, curate a list of **at least 20 jobs** with:
 
 ---
 
-### 🟢 HIGH PROBABILITY — Apply Immediately (Score 70+)
+### 🟢 LIKELY HIGH FIT — Skills and level look like a strong match
 
-| # | Company | Role | Location | Type | Fit Score | Apply Link |
-|---|---------|------|----------|------|-----------|------------|
-| 1 | [company] | [title] | [city] | [Startup/MNC/Product] | [X]/100 | [🔗 Apply](url) |
-| 2 | ... | ... | ... | ... | .../100 | [🔗 Apply](url) |
+| # | Company | Role | Location | Type | Apply Link |
+|---|---------|------|----------|------|------------|
+| 1 | [company] | [title] | [city] | [Startup/MNC/Product] | [🔗 Apply](url) |
+| 2 | ... | ... | ... | ... | [🔗 Apply](url) |
 
-### 🟡 MEDIUM PROBABILITY — Worth Trying (Score 55-69)
+### 🟡 LIKELY MEDIUM FIT — Some skill gaps or slight level mismatch
 
-| # | Company | Role | Location | Type | Fit Score | Apply Link |
-|---|---------|------|----------|------|-----------|------------|
+| # | Company | Role | Location | Type | Apply Link |
+|---|---------|------|----------|------|------------|
 
-### 🔴 STRETCH ROLES — Aspirational (Score 40-54)
+### 🔴 LIKELY STRETCH — Significant gaps but worth including
 
-| # | Company | Role | Location | Type | Fit Score | Apply Link |
-|---|---------|------|----------|------|-----------|------------|
+| # | Company | Role | Location | Type | Apply Link |
+|---|---------|------|----------|------|------------|
 
 ---
 
+> ℹ️ Precise fit scores (out of 100) are calculated in the next step by the Job Scorer skill.
+
 ### 📋 Quick Stats
-- 🟢 High Probability: [X] jobs
-- 🟡 Medium Probability: [X] jobs
-- 🔴 Stretch: [X] jobs
+- 🟢 Likely High Fit: [X] jobs
+- 🟡 Likely Medium Fit: [X] jobs
+- 🔴 Likely Stretch: [X] jobs
 - Total: [X] jobs
 
 ### 🚀 Recommended Application Order
@@ -186,7 +188,7 @@ Based on what's commonly required but missing from your profile:
 
 1. **Minimum 20 jobs** — if initial search returns fewer, search more queries or supplement with career page links
 2. **Every job MUST have an application link** — no link = don't include it
-3. **Score every job** against the resume using the Job Scorer skill dimensions
+3. **Categorize jobs** by preliminary fit (🟢/🟡/🔴) — do NOT assign numeric scores here; that is the Job Scorer skill's responsibility
 4. **Include company type** — Startup / Scale-up / MNC / Product Co / Service Co / Consulting
 5. **Mix of company types** — don't just list MNCs or just startups; cover the spectrum
 6. **For freshers** — prioritize companies known to hire freshers; search their career pages directly

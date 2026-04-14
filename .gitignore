@@ -2,7 +2,6 @@
 .cache/
 job_tracker.json
 job_tracker.xlsx
-job_tracker.lock
 application_drafts/
 
 # Python (no longer used, but just in case)

@@ -41,18 +41,22 @@ Each cache file has this structure:
 ```json
 {
   "cached_at": "2025-01-15T10:30:00",
+  "schema_version": "1",
   "data": { ... }
 }
 ```
 
-Check the `cached_at` timestamp against the TTL to determine if data is still fresh.
+**Freshness check:** A cache file is fresh if `(now_UTC - cached_at) < TTL`. Parse `cached_at`
+as ISO 8601, compute the difference in hours, and compare against the TTL. If the file is
+missing, unreadable, has no `cached_at`, or `schema_version` != "1", treat it as stale.
 
 ### Multi-Persona Support
 
-Each candidate gets their own cache directory. The persona slug is derived from the candidate's name (e.g., "Gaurav Ratnawat" becomes `gaurav-ratnawat`).
+Each candidate gets their own cache directory. The persona slug is derived from the candidate's name (e.g., "Gaurav Ratnawat" becomes `gaurav-ratnawat`): lowercase, spaces replaced with hyphens, special characters stripped.
 
-- To switch personas, write the slug to `.cache/active_persona.txt`
-- To see what personas exist, list the directories in `.cache/`
+- When saving a new profile, create the directory `.cache/<slug>/` and write the slug to `.cache/active_persona.txt`
+- To switch personas, write a different slug to `.cache/active_persona.txt`
+- To list all personas, list the directories in `.cache/`
 
 ## Workflow
 

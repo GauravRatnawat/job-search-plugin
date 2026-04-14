@@ -12,11 +12,14 @@ Each cache file has this structure:
 ```json
 {
   "cached_at": "2025-01-15T10:30:00",
+  "schema_version": "1",
   "data": { ... }
 }
 ```
 
-Check the `cached_at` timestamp against the TTL to determine freshness.
+**Freshness check:** A cache file is fresh if `(now_UTC - cached_at) < TTL`. Parse `cached_at`
+as ISO 8601, compute the difference in hours, and compare against the TTL. If the file is
+missing, unreadable, has no `cached_at`, or `schema_version` != "1", treat it as stale.
 
 To work with a different person's data, write their persona slug to `.cache/active_persona.txt`.
 
@@ -51,6 +54,7 @@ Read the resume at $ARGUMENTS (if it's a file path, use the Read tool; if it's p
      ```json
      {
        "cached_at": "<current ISO timestamp>",
+       "schema_version": "1",
        "data": { <structured profile JSON> }
      }
      ```
