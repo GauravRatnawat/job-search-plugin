@@ -8,6 +8,29 @@ If the argument is a job ID, read `job_tracker.json` and find the matching job t
 
 If the argument is a URL, use it directly.
 
+**Step 1.5: Confirm with the user before proceeding**
+
+Show the job details and ask:
+
+```
+You're about to apply to:
+
+- **Company:** [company]
+- **Role:** [title]
+- **Location:** [location]
+- **Apply via:** [URL / email]
+- **Fit score:** [score]/100 [grade] (if available from tracker)
+
+Before I help you apply:
+1. Have you tailored your resume for this role? (Run `/tailor-resume` if not)
+2. Do you want a cover letter? (Run `/cover-letter` if not)
+3. Ready to proceed with the application?
+
+Say "yes" to continue, or ask for resume tailoring / cover letter first.
+```
+
+Wait for the user's confirmation. Do not proceed to Step 2 until they say yes.
+
 **Step 2: Determine the application method**
 
 Check the URL domain:
