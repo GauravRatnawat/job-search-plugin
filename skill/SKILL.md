@@ -109,6 +109,23 @@ Read `.cache/active_persona.txt` and check each stage's cache file for freshness
 5. **Cache the result:** Write to `.cache/<persona>/profile.json`.
    The persona slug is derived from the candidate's name.
 
+### Confirm Before Hunting
+
+After Step 1, present your inferences and confirm with the user before searching:
+
+```
+Before I start hunting, confirm a few things:
+1. Target roles: [role 1], [role 2], [role 3] — add or remove any?
+2. Preferred locations: [inferred cities] — correct? Any others or "remote only"?
+3. Work mode preference: remote / hybrid / onsite?
+4. Company types: startups, product cos, MNCs — anything to exclude?
+5. Any industries or companies to avoid?
+
+Say "go" or correct anything above.
+```
+
+Wait for confirmation before proceeding to Step 2.
+
 ### Step 2: Proactive Job Hunting
 1. **Check cache:** If `.cache/<persona>/search_results.json` is fresh, skip to Step 3.
 2. Read `skills/job-hunter/SKILL.md` and `skills/job-searcher/SKILL.md`.

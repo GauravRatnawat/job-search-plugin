@@ -15,9 +15,27 @@ Don't wait for the user to tell you what to search. After seeing their parsed pr
 - Which geographies to cover
 - Which job boards to hit
 
+## Step 0: Confirm Preferences
+
+**Before generating any search queries**, confirm with the user what to search for. Present your inferences and wait for a response:
+
+```
+Here's what I'm planning to search for. Correct anything before I start:
+
+- **Roles:** [role 1], [role 2], [role 3] — anything to add or remove?
+- **Locations:** [city/region inferred from resume] — any other cities or "remote only"?
+- **Work mode:** Defaulting to [remote/hybrid/onsite based on profile] — preference?
+- **Company types:** Mix of startups, product cos, MNCs — anything to exclude?
+- **Industries to target or avoid?**
+
+Say "go" or correct anything above.
+```
+
+Do not proceed to Step 1 until the user confirms or provides corrections. Update the search plan accordingly.
+
 ## Step 1: Generate Search Strategy
 
-Based on the parsed resume profile, create a multi-pronged search plan:
+Based on the confirmed preferences, create a multi-pronged search plan:
 
 ```
 ### 🔍 Search Plan for [Candidate Name]
@@ -49,11 +67,13 @@ Use your **web search** to find real job listings. Run multiple searches with di
 
 **Adapt queries to the candidate's location.** If they are in Europe, search European boards; if in India, search Indian boards; if in the US, search US boards. Never default to a single geography.
 
+**Recency rule:** Only surface jobs posted in the last 30 days. Prefer last 7 days. Append `after:[date 30 days ago]` to Google queries. On LinkedIn/Naukri/Indeed, set filter to "Past Month". On Greenhouse/Lever, sort newest-first.
+
 **General queries (always use):**
-- `[role] jobs [candidate city] [current year]`
-- `[role] [experience level] [candidate country] hiring`
+- `[role] jobs [candidate city] [current year] after:[YYYY-MM-DD 30 days ago]`
+- `[role] [experience level] [candidate country] hiring [current month]`
 - `[company] careers [role]`
-- `site:linkedin.com/jobs [role] [candidate city or country]`
+- `site:linkedin.com/jobs [role] [candidate city or country]` (filter: Past Month)
 - `site:wellfound.com [role]`
 
 **Location-specific board queries:**
@@ -194,5 +214,5 @@ Based on what's commonly required but missing from your profile:
 6. **For freshers** — prioritize companies known to hire freshers; search their career pages directly
 7. **Be honest about fit** — a 45/100 stretch role is still useful information
 8. **Include "why" for top 5** — brief explanation of why each is a good match
-9. **Date sensitivity** — note if any postings look old or may have expired
+9. **Recency required** — only include listings posted within the last 30 days; prefer last 7 days. Drop anything older. If date is unavailable, flag it as "Date unknown — verify before applying."
 10. **No fake/fabricated listings** — only include jobs you found via web search or from verified career pages

@@ -157,6 +157,24 @@ Based on their location and profile:
 [cities/remote recommendations]
 ```
 
+## Confirm Before Proceeding
+
+After presenting the parsed profile, **always ask the user to confirm key preferences before moving to job search.** Do not assume. Present your inferences and ask:
+
+```
+Before I start hunting for jobs, let me confirm a few things I inferred from your resume:
+
+1. **Target roles:** I'll search for [role 1], [role 2], [role 3]. Any roles to add or remove?
+2. **Preferred locations:** [inferred city/cities + remote?]. Correct?
+3. **Work mode preference:** Open to remote, hybrid, or onsite — or a specific preference?
+4. **Experience level:** Targeting [fresher/entry/junior/mid/senior] roles. Right?
+5. **Any companies or industries to avoid?**
+
+Reply with any changes, or say "looks good" to continue.
+```
+
+Wait for the user's response before proceeding to job hunting. Update the profile and search strategy based on their corrections.
+
 ## Important Notes
 - If the candidate is a fresher, focus on projects, internships, and coursework as experience proxies
 - For freshers, infer skills from projects and education — not just a "Skills" section

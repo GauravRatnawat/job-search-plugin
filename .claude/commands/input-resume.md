@@ -62,6 +62,24 @@ Read the resume at $ARGUMENTS (if it's a file path, use the Read tool; if it's p
 
 The profile JSON must include: `name`, `location`, `level`, `years`, `primary_domain`, `skills` (categorized), `experience` (company/title/domain), `target_roles`, `target_domains`, `target_locations`.
 
+### Confirm Before Hunting
+
+After Step 1, **before starting any job searches**, confirm key preferences with the user. Present what you inferred from the resume and ask:
+
+```
+Before I start hunting, confirm these:
+
+1. Target roles: [role 1], [role 2], [role 3] — add or remove any?
+2. Preferred locations: [inferred cities] — correct? Any others or "remote only"?
+3. Work mode: remote / hybrid / onsite — preference?
+4. Company types: startups, product, MNCs — anything to exclude?
+5. Any industries or companies to avoid?
+
+Say "go" or correct anything above.
+```
+
+Wait for the user's confirmation before proceeding. Apply their corrections to the search strategy.
+
 ### Step 2: Hunt for Jobs
 1. Check if `.cache/<persona>/search_results.json` exists and is fresh — if so, skip to Step 3.
 2. Read `skills/job-hunter/SKILL.md` and `skills/job-searcher/SKILL.md`.

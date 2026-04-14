@@ -30,6 +30,7 @@ Based on the candidate's profile (or their explicit request), construct multiple
 - Different role titles (e.g., "software engineer" AND "software developer" AND "SDE")
 - Different locations (e.g., "Bangalore" AND "India" AND "remote")
 - Specific companies known to hire for that role
+- **Recency suffix** — append `after:[date 30 days ago]` to Google queries (e.g., `after:2026-03-14`). On LinkedIn/Naukri/Indeed, use the "Past Month" date filter. On Greenhouse/Lever, sort by newest.
 
 ### 2. Where to Search
 
@@ -77,7 +78,7 @@ For every job you find, extract:
 
 - **ONLY include jobs with working application links** — no link = don't include
 - **Verify the company exists** — no fake/spam listings
-- **Check freshness** — prefer jobs posted within the last 30 days
+- **Recency required** — only include jobs posted within the last 30 days. Prefer listings from the last 7 days. Drop anything older than 30 days even if the link works. Add `after:YYYY-MM-DD` to Google queries (30 days back from today) to filter at search time. On job boards, use the "Date Posted: Past Month" filter.
 - **Flag suspicious listings** — vague descriptions, no company info, unrealistic salary
 - **Aim for 20+ jobs** — run multiple searches if needed
 - **Diverse mix** — cover startups, MNCs, product companies, service companies, consulting firms

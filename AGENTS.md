@@ -63,6 +63,7 @@ Each candidate gets their own cache directory. The persona slug is derived from 
 Each step has a detailed instruction file. Read it before executing that step.
 
 1. **Parse resume** -- Read `skills/resume-parser/SKILL.md` and follow its instructions.
+1.5. **Confirm preferences** -- After parsing the resume, present inferred roles/locations/work-mode and ask the user to confirm or correct before searching. Wait for their response.
 2. **Generate search strategy** -- Read `skills/job-hunter/SKILL.md`.
 3. **Execute job searches** -- Read `skills/job-searcher/SKILL.md`.
 4. **Deduplicate and filter** -- Read `skills/job-search-analyst/SKILL.md`.

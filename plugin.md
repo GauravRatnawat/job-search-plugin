@@ -103,6 +103,23 @@ Otherwise proceed from the first stale/missing stage.
 3. Output: full structured profile + strategic assessment.
 4. Write result to `.cache/<persona>/profile.json`.
 
+### Confirm Before Hunting
+
+After Step 1, present inferences and confirm with the user before searching:
+
+```
+Before I start hunting, confirm a few things:
+1. Target roles: [role 1], [role 2], [role 3] — add or remove any?
+2. Preferred locations: [inferred cities] — correct? Any others or "remote only"?
+3. Work mode preference: remote / hybrid / onsite?
+4. Company types: startups, product cos, MNCs — anything to exclude?
+5. Any industries or companies to avoid?
+
+Say "go" or correct anything above.
+```
+
+Wait for confirmation before proceeding.
+
 ### Step 2: Proactive Job Hunting
 1. Apply the Job Hunter skill (`skills/job-hunter/SKILL.md`) -- generates a multi-query search strategy.
 2. Write strategy to `.cache/<persona>/search_strategy.json`.

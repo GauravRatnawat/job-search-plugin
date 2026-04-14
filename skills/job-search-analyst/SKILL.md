@@ -17,6 +17,7 @@ When job listings are collected (from web search results), do the following:
 - Note which sources returned duplicates
 
 ### 2. Filter Out Noise
+- **Remove stale listings** — drop any job posted more than 30 days ago. If posting date is unknown, flag it as "Date unknown — verify before applying" rather than dropping it outright. Prefer listings from the last 7 days.
 - Remove jobs that are clearly spam (no company name, vague descriptions, suspicious salary claims)
 - Remove jobs that are obviously wrong level (e.g., "VP of Engineering" for a fresher search)
 - Remove jobs requiring hard prerequisites the candidate cannot meet (e.g., "Indian medical license" for an engineer)
