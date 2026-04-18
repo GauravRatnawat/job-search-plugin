@@ -13,11 +13,21 @@ Your **AI-powered job search companion**. Tell it your background, and it finds 
 5. Get a prioritized list: jobs you should apply to today vs. stretch goals
 6. Tailor your resume for any role, generate a cover letter, prep for interviews — all in one place
 
-## Install (Claude Code)
+## Quick Start
 
 ```
+# Step 1: Install (one-time)
 /plugin marketplace add GauravRatnawat/job-search-plugin
 /plugin install job-search@job-search-plugin
+
+# Step 2: Drop your resume
+/job-search:input-resume ~/path/to/resume.pdf
+
+# Step 3: AI finds and scores 20+ jobs — then follow up
+/job-search:tailor-resume 3          # tailor resume for job #3
+/job-search:cover-letter 3           # write a cover letter
+/job-search:interview-prep Google    # prep for that interview
+/job-search:tracker save             # save results to tracker
 ```
 
 ## Commands
