@@ -28,6 +28,7 @@ Your **AI-powered job search companion**. Tell it your background, and it finds 
 /job-search:cover-letter 3           # write a cover letter
 /job-search:interview-prep Google    # prep for that interview
 /job-search:tracker save             # save results to tracker
+/job-search:view                     # browse jobs in interactive TUI (brew install gum first)
 ```
 
 ## Commands
@@ -40,6 +41,7 @@ Your **AI-powered job search companion**. Tell it your background, and it finds 
 | `/job-search:interview-prep <company>` | Get behavioral + technical questions with answer frameworks |
 | `/job-search:tracker <save\|view\|update\|summary>` | Track your applications |
 | `/job-search:apply <job or url>` | Get the direct link + draft an email application |
+| `/job-search:view [A\|B\|C]` | Browse jobs interactively — scores, links, status updates (requires `gum`) |
 
 ## How Jobs Are Scored
 
