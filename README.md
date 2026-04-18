@@ -28,7 +28,6 @@ Your **AI-powered job search companion**. Tell it your background, and it finds 
 /job-search:cover-letter 3           # write a cover letter
 /job-search:interview-prep Google    # prep for that interview
 /job-search:tracker save             # save results to tracker
-/job-search:view                     # browse jobs in interactive TUI (brew install gum first)
 ```
 
 ## Commands
@@ -41,7 +40,6 @@ Your **AI-powered job search companion**. Tell it your background, and it finds 
 | `/job-search:interview-prep <company>` | Get behavioral + technical questions with answer frameworks |
 | `/job-search:tracker <save\|view\|update\|summary>` | Track your applications |
 | `/job-search:apply <job or url>` | Get the direct link + draft an email application |
-| `/job-search:view [A\|B\|C]` | Browse jobs interactively — scores, links, status updates (requires `gum`) |
 
 ## How Jobs Are Scored
 
@@ -59,6 +57,18 @@ Results are grouped as:
 - **HIGH (70+)** — Apply today
 - **MEDIUM (55–69)** — Worth it with a tailored resume
 - **STRETCH (40–54)** — Aspirational, good to keep an eye on
+
+## Optional: Interactive TUI
+
+If you prefer browsing jobs in a terminal UI instead of reading Claude's output, install [gum](https://github.com/charmbracelet/gum) and use `/job-search:view`:
+
+```bash
+brew install gum          # one-time install
+/job-search:view          # browse all jobs
+/job-search:view A        # only grade A jobs
+```
+
+Lets you scroll through jobs, see scoring breakdowns, open links, and update application status — all without leaving the terminal.
 
 ## Privacy & Guardrails
 
