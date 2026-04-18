@@ -79,6 +79,7 @@ Match against resume using **exact and near-exact only** — no synonyms.
 - Common shortenings: `Kubernetes` ↔ `k8s`
 
 **Score:** `(required_found / required_total) × 100`
+**If required_total = 0** (JD has no explicit required keywords): treat keyword score as 100 — nothing required means nothing to fail.
 **Bonus:** each preferred keyword found = +2 pts, capped at +10
 
 Track:
@@ -106,10 +107,11 @@ Non-standard headers ATS may miss:
 - "Credentials", "Achievements" → should be "Certifications"
 
 **Full Mode:** Detect header names directly from raw resume text.
-**Limited Mode:** Confirm that Skills, Experience, Education data exists in profile JSON. Cannot detect if headers are named incorrectly. Award partial credit (60%) for confirmed sections.
+**Limited Mode:** Confirm that Skills, Experience, Education data exists in profile JSON. Cannot detect if headers are named incorrectly. For each confirmed required section, count it as 0.6 in the numerator instead of 1.0 (i.e., 3 confirmed sections = numerator of 1.8 out of 3, giving a section score of 60%).
 
-Score: `(recognized_sections / total_expected_sections) × 100`
-Expected sections: Experience, Skills, Education (required); Summary, Certifications (bonus if present)
+Score: `(recognized_sections / 3) × 100`, capped at 100
+Required denominator is always 3 (Experience, Skills, Education).
+If Summary or Certifications are also recognized, each adds +1 to the numerator (max score 100 — cap after calculation).
 
 ---
 
@@ -233,6 +235,9 @@ Use this exact format:
 ✅ Contact info present
 ✅ Consistent date formats
 ⚠️  2 experience entries missing end dates
+
+### Title/Role Alignment
+[Score description — e.g., "Senior Backend Engineer → Backend Engineer (Job Title): Related — 70 pts"]
 
 ---
 
