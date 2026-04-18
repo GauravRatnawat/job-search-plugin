@@ -1,6 +1,6 @@
 Tailor the candidate's resume for: $ARGUMENTS
 
-Read `skills/resume-tailor/SKILL.md` and follow its full instructions.
+Use the `job-search:resume-tailor` skill and follow its full instructions.
 
 **Get the candidate's profile** from the pipeline cache:
 

@@ -12,7 +12,7 @@ This repo supports multiple AI platforms. Pick the one you use:
 |----------|-------------|-------|
 | **Codex** | Open the repo in Codex. It reads `AGENTS.md` automatically. | None |
 | **Claude Code (standalone)** | Clone the repo and open it. Claude reads `CLAUDE.md` + `.claude/commands/`. | None |
-| **Claude Code (plugin)** | `claude plugin install job-search` or `claude --plugin-dir /path/to/repo` | None |
+| **Claude Code (plugin)** | `/plugin marketplace add GauravRatnawat/job-search-plugin` then `/plugin install job-search@job-search-plugin` | None |
 | **Claude Projects** | Paste `plugin.md` into project knowledge. | None |
 | **Claude Code (skill)** | `ln -sf /path/to/repo/skill ~/.claude/skills/job-search` | None |
 | **Cursor / Copilot / Other** | Open the repo. The agent reads `AGENTS.md`. | None |
@@ -93,6 +93,7 @@ skills/                          9 AI skills (pipeline steps)
 .claude/commands/                Slash commands (standalone Claude Code)
 commands/                        Slash commands (Claude Code plugin)
 .claude-plugin/plugin.json       Plugin manifest
+.claude-plugin/marketplace.json  Marketplace definition (enables /plugin marketplace add)
 skill/SKILL.md                   Installable Claude Code skill
 AGENTS.md                        Codex / generic agent instructions
 CLAUDE.md                        Standalone Claude Code instructions

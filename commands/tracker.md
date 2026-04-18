@@ -1,6 +1,6 @@
 Manage the job application tracker. Command: $ARGUMENTS
 
-Read `skills/application-tracker/SKILL.md` for pipeline rules, status definitions, and the JSON file format.
+Use the `job-search:application-tracker` skill for pipeline rules, status definitions, and the JSON file format.
 
 **Tracker file:** `job_tracker.json`
 

@@ -1,0 +1,17 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "job-search-plugin",
+  "description": "AI recruiter and job hunting assistant for Claude Code. Analyzes resumes, hunts jobs via web search, scores matches, and manages applications. No dependencies.",
+  "owner": {
+    "name": "Gaurav Ratnawat",
+    "url": "https://github.com/GauravRatnawat"
+  },
+  "plugins": [
+    {
+      "name": "job-search",
+      "description": "AI recruiter: resume analysis, job hunting, scoring, cover letters, interview prep, application tracking. Pure skill instructions + native file I/O.",
+      "source": "./",
+      "category": "productivity"
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 Prepare for an interview at: $ARGUMENTS
 
-Read `skills/interview-prep/SKILL.md` and follow its full instructions.
+Use the `job-search:interview-prep` skill and follow its full instructions.
 
 **Get the candidate's profile** from the pipeline cache:
 

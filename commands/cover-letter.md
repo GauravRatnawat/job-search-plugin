@@ -1,6 +1,6 @@
 Write a cover letter for: $ARGUMENTS
 
-Read `skills/cover-letter-writer/SKILL.md` and follow its full instructions.
+Use the `job-search:cover-letter-writer` skill and follow its full instructions.
 
 **Get the candidate's profile** from the pipeline cache:
 
