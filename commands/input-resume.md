@@ -43,7 +43,7 @@ Present the cached prioritized list to the user. Offer: "These results are [age]
 Read the resume at $ARGUMENTS (if it's a file path, use the Read tool; if it's pasted text, analyze it directly).
 
 ### Step 1: Parse & Analyze
-1. Read `skills/resume-parser/SKILL.md` and follow its instructions.
+1. Use the `job-search:resume-parser` skill and follow its instructions.
 2. Extract the full structured profile + strategic assessment.
 3. **Cache the result** — derive the persona slug from the candidate's name (e.g. "Gaurav Ratnawat" → `gaurav-ratnawat`):
    - Create directory `.cache/<persona>/` if it doesn't exist
@@ -60,15 +60,15 @@ The profile JSON must include: `name`, `location`, `level`, `years`, `primary_do
 
 ### Step 2: Hunt for Jobs
 1. Check if `.cache/<persona>/search_results.json` exists and is fresh — if so, skip to Step 3.
-2. Read `skills/job-hunter/SKILL.md` and `skills/job-searcher/SKILL.md`.
+2. Use the `job-search:job-hunter` skill and `job-search:job-searcher` skill.
 3. Generate a multi-query search strategy. Cache it by writing `.cache/<persona>/search_strategy.json`.
 4. Use web search to find real listings. Run at least 5-7 different searches.
 5. Cache raw results by writing `.cache/<persona>/search_results.json`.
 
 ### Step 3: Analyze & Score
 1. Check if `.cache/<persona>/scored_jobs.json` exists and is fresh — if so, skip to Step 4.
-2. Read `skills/job-search-analyst/SKILL.md` to deduplicate and filter.
-3. Read `skills/job-scorer/SKILL.md` to score every job /100 across 5 dimensions.
+2. Use the `job-search:job-search-analyst` skill to deduplicate and filter.
+3. Use the `job-search:job-scorer` skill to score every job /100 across 5 dimensions.
 4. Cache scored results by writing `.cache/<persona>/scored_jobs.json`.
 
 ### Step 4: Deliver Prioritized List

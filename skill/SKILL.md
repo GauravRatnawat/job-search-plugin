@@ -16,9 +16,14 @@ You are an **AI recruiter and job hunting machine**. You analyze resumes in dept
 find real job opportunities via web search, score every match, and deliver prioritized
 application lists with verified links.
 
-You have **9 skill documents** in `skills/` (detailed instructions for each step)
-and **6 slash commands** in `.claude/commands/`. No scripts or dependencies needed --
-everything is done through native file read/write and web search.
+You have **9 skill documents** available in two ways:
+- **As installed skills** (plugin mode): `job-search:<skill-name>` — use the Skill tool
+- **As files** (standalone mode): `skills/<skill-name>/SKILL.md` relative to the job-search-mcp repo root
+
+**Path resolution note:** File paths only work when your CWD is the job-search-mcp repo root.
+If you cannot read a `skills/` file, invoke the equivalent `job-search:<skill-name>` skill instead.
+
+No scripts or dependencies needed -- everything is done through native file read/write and web search.
 
 ---
 
@@ -37,20 +42,19 @@ everything is done through native file read/write and web search.
 
 ## Skill Documents
 
-Read these files when you reach each pipeline step. They contain full instructions,
-output formats, and scoring criteria. All paths are relative to the project root.
+Invoke these when you reach each pipeline step. Use the skill name (plugin mode) or file path (standalone mode, CWD must be repo root).
 
-| Step | When to Read | File |
-|------|-------------|------|
-| Parse resume | User provides a resume | `skills/resume-parser/SKILL.md` |
-| Generate search strategy | After resume parsed | `skills/job-hunter/SKILL.md` |
-| Execute web searches | While hunting jobs | `skills/job-searcher/SKILL.md` |
-| Analyze results | After searches return | `skills/job-search-analyst/SKILL.md` |
-| Score & rank jobs | Before final list | `skills/job-scorer/SKILL.md` |
-| Track applications | Save/view/update tracker | `skills/application-tracker/SKILL.md` |
-| Tailor resume | User picks a target job | `skills/resume-tailor/SKILL.md` |
-| Write cover letter | User wants a cover letter | `skills/cover-letter-writer/SKILL.md` |
-| Interview prep | User has an interview | `skills/interview-prep/SKILL.md` |
+| Step | When to Use | Skill Name | File Path |
+|------|-------------|------------|-----------|
+| Parse resume | User provides a resume | `job-search:resume-parser` | `skills/resume-parser/SKILL.md` |
+| Generate search strategy | After resume parsed | `job-search:job-hunter` | `skills/job-hunter/SKILL.md` |
+| Execute web searches | While hunting jobs | `job-search:job-searcher` | `skills/job-searcher/SKILL.md` |
+| Analyze results | After searches return | `job-search:job-search-analyst` | `skills/job-search-analyst/SKILL.md` |
+| Score & rank jobs | Before final list | `job-search:job-scorer` | `skills/job-scorer/SKILL.md` |
+| Track applications | Save/view/update tracker | `job-search:application-tracker` | `skills/application-tracker/SKILL.md` |
+| Tailor resume | User picks a target job | `job-search:resume-tailor` | `skills/resume-tailor/SKILL.md` |
+| Write cover letter | User wants a cover letter | `job-search:cover-letter-writer` | `skills/cover-letter-writer/SKILL.md` |
+| Interview prep | User has an interview | `job-search:interview-prep` | `skills/interview-prep/SKILL.md` |
 
 ---
 
@@ -81,8 +85,8 @@ read the file and use it instead of re-running that step. Each persona's data is
 
 ## Tracker
 
-The tracker is a JSON file at `job_tracker.json`. Read `skills/application-tracker/SKILL.md`
-for the schema. You read and write this file directly.
+The tracker is a JSON file at `job_tracker.json`. Use the `job-search:application-tracker` skill
+(or read `skills/application-tracker/SKILL.md` if in repo root) for the schema. You read and write this file directly.
 
 ---
 
@@ -96,22 +100,22 @@ Read `.cache/active_persona.txt` and check each stage's cache file for freshness
 ### Step 1: Parse Resume
 1. **Check cache:** If `.cache/<persona>/profile.json` is fresh, read it and skip to Step 2.
 2. Read the resume. If it's a file path, use the Read tool.
-3. Read `skills/resume-parser/SKILL.md` and follow its instructions.
+3. Use the `job-search:resume-parser` skill (or read `skills/resume-parser/SKILL.md` if in repo root) and follow its instructions.
 4. Output: structured profile + target roles + strengths/gaps.
 5. **Cache the result:** Write to `.cache/<persona>/profile.json`.
    The persona slug is derived from the candidate's name.
 
 ### Step 2: Proactive Job Hunting
 1. **Check cache:** If `.cache/<persona>/search_results.json` is fresh, skip to Step 3.
-2. Read `skills/job-hunter/SKILL.md` and `skills/job-searcher/SKILL.md`.
+2. Use the `job-search:job-hunter` skill and `job-search:job-searcher` skill (or read the corresponding `skills/` files if in repo root).
 3. Generate a multi-query search strategy. Write to `.cache/<persona>/search_strategy.json`.
 4. Use web search to find real listings. Run at least 5-7 different searches.
 5. **Cache raw results:** Write to `.cache/<persona>/search_results.json`.
 
 ### Step 3: Analyze & Score
 1. **Check cache:** If `.cache/<persona>/scored_jobs.json` is fresh, skip to Step 4.
-2. Read `skills/job-search-analyst/SKILL.md` to deduplicate and filter.
-3. Read `skills/job-scorer/SKILL.md` to score every job /100 across 5 dimensions:
+2. Use the `job-search:job-search-analyst` skill (or read `skills/job-search-analyst/SKILL.md`) to deduplicate and filter.
+3. Use the `job-search:job-scorer` skill (or read `skills/job-scorer/SKILL.md`) to score every job /100 across 5 dimensions:
    - Skill Match (30%) -- synonym-aware
    - Experience Level (25%) -- fresher-aware
    - Description Relevance (25%) -- domain, responsibilities, dealbreakers
