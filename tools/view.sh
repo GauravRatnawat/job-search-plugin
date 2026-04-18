@@ -13,28 +13,94 @@ fi
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT="$SCRIPT_DIR/.."
-GRADE_FILTER="${1:-all}"
 
-# --- Load & merge data via python3 ---
-JOBS_JSON=$(python3 - "$ROOT" "$GRADE_FILTER" <<'PYEOF'
-import json, sys, os
+# --- Argument parsing ---
+# Usage: view.sh [profile_name] [A|B|C|all]
+# Profile name = any arg that isn't a grade letter
+PROFILE_ARG=""
+GRADE_FILTER="all"
+
+for arg in "$@"; do
+  case "${arg^^}" in
+    A|B|C|D|F|ALL) GRADE_FILTER="${arg^^}" ;;
+    *) PROFILE_ARG="$arg" ;;
+  esac
+done
+
+# --- Resolve profile ---
+# Priority: explicit arg → active_persona.txt → gum choose from available
+PERSONA=$(python3 - "$ROOT" "$PROFILE_ARG" <<'PYEOF'
+import sys, json
 from pathlib import Path
 
 root = Path(sys.argv[1])
-grade_filter = sys.argv[2].upper()
+arg  = sys.argv[2].strip()
+cache = root / ".cache"
 
-# Read persona
-persona_file = root / ".cache" / "active_persona.txt"
-persona = persona_file.read_text().strip() if persona_file.exists() else None
+# Get all available profiles (dirs with scored_jobs or at least profile.json)
+profiles = sorted([
+    d.name for d in cache.iterdir()
+    if d.is_dir() and d.name != "__pycache__" and (
+        (d / "scored_jobs.json").exists() or (d / "profile.json").exists()
+    )
+]) if cache.exists() else []
+
+if arg:
+    # Fuzzy match: exact first, then startswith
+    if arg in profiles:
+        print(arg); sys.exit(0)
+    matches = [p for p in profiles if p.startswith(arg.lower())]
+    if matches:
+        print(matches[0]); sys.exit(0)
+    # Not found — still pass it through, will surface as NO_DATA
+    print(arg); sys.exit(0)
+
+# No arg: use active_persona.txt
+active_file = cache / "active_persona.txt"
+if active_file.exists():
+    active = active_file.read_text().strip()
+    if active in profiles:
+        print(active); sys.exit(0)
+
+# Multiple profiles with no active set — let shell handle the pick
+if profiles:
+    print("\n".join(["__PICK__"] + profiles))
+else:
+    print("__NONE__")
+PYEOF
+)
+
+# Interactive profile picker when multiple exist and none specified
+if [[ "$PERSONA" == __PICK__* ]]; then
+  PROFILES=$(echo "$PERSONA" | tail -n +2)
+  PERSONA=$(echo "$PROFILES" | gum choose --header "Select a profile:")
+fi
+
+if [ "$PERSONA" = "__NONE__" ] || [ -z "$PERSONA" ]; then
+  gum style \
+    --border rounded --padding "1 2" --border-foreground 212 \
+    "No job data found." \
+    "" \
+    "Run /input-resume <path> first, then /tracker save to save results."
+  exit 0
+fi
+
+# --- Load & merge data via python3 ---
+JOBS_JSON=$(python3 - "$ROOT" "$PERSONA" "$GRADE_FILTER" <<'PYEOF'
+import json, sys
+from pathlib import Path
+
+root         = Path(sys.argv[1])
+persona      = sys.argv[2]
+grade_filter = sys.argv[3].upper()
 
 # Load scored jobs
 scored = {}
-if persona:
-    sj_path = root / ".cache" / persona / "scored_jobs.json"
-    if sj_path.exists():
-        data = json.loads(sj_path.read_text())
-        for j in data.get("data", {}).get("jobs", []):
-            scored[j["id"]] = j
+sj_path = root / ".cache" / persona / "scored_jobs.json"
+if sj_path.exists():
+    data = json.loads(sj_path.read_text())
+    for j in data.get("data", {}).get("jobs", []):
+        scored[j["id"]] = j
 
 # Load tracker
 tracker = {}
@@ -63,10 +129,8 @@ for jid in all_ids:
         job["grade"] = t["grade"]
     merged.append(job)
 
-# Sort by score desc
 merged.sort(key=lambda j: j.get("score", 0), reverse=True)
 
-# Apply grade filter
 if grade_filter != "ALL":
     merged = [j for j in merged if j.get("grade", "").upper() == grade_filter]
 
@@ -77,10 +141,9 @@ PYEOF
 if [ "$JOBS_JSON" = "NO_DATA" ]; then
   gum style \
     --border rounded --padding "1 2" --border-foreground 212 \
-    "No job data found." \
+    "No job data found for profile: $PERSONA" \
     "" \
-    "Run $(gum style --foreground 212 '/input-resume <path>') first," \
-    "then $(gum style --foreground 212 '/tracker save') to save results."
+    "Run /input-resume <path> first, then /tracker save to save results."
   exit 0
 fi
 
@@ -92,22 +155,25 @@ if [ "$JOB_COUNT" -eq 0 ]; then
 fi
 
 # --- Build TSV for gum table ---
-TSV=$(python3 - "$JOBS_JSON" <<'PYEOF'
+build_tsv() {
+  python3 - "$1" <<'PYEOF'
 import json, sys
-
 jobs = json.loads(sys.argv[1])
 print("Score\tGrade\tCompany\tTitle\tLocation\tStatus")
 for j in jobs:
-    company = j.get("company", "")[:22]
-    title = j.get("title", "")[:30]
+    company  = j.get("company",  "")[:22]
+    title    = j.get("title",    "")[:30]
     location = j.get("location", "")[:18]
     print(f"{j.get('score',0)}\t{j.get('grade','?')}\t{company}\t{title}\t{location}\t{j.get('status','New')}")
 PYEOF
-)
+}
+
+TSV=$(build_tsv "$JOBS_JSON")
 
 # --- Main loop ---
 while true; do
-  gum style --foreground 212 --bold "  Job Search Assistant  $(gum style --faint "($JOB_COUNT jobs | filter: $GRADE_FILTER)")"
+  gum style --foreground 212 --bold \
+    "  Job Search  $(gum style --faint "profile: $PERSONA  |  $JOB_COUNT jobs  |  filter: $GRADE_FILTER")"
   echo ""
 
   SELECTED=$(echo "$TSV" | gum table \
@@ -115,40 +181,27 @@ while true; do
     --height 20 \
     --print)
 
-  if [ -z "$SELECTED" ]; then
-    break
-  fi
+  [ -z "$SELECTED" ] && break
 
-  # Parse selected row (tab-separated)
   SEL_SCORE=$(echo "$SELECTED" | cut -f1)
-  SEL_GRADE=$(echo "$SELECTED" | cut -f2)
   SEL_COMPANY=$(echo "$SELECTED" | cut -f3)
-  SEL_TITLE=$(echo "$SELECTED" | cut -f4)
 
-  # Look up full job data
   JOB=$(python3 - "$JOBS_JSON" "$SEL_SCORE" "$SEL_COMPANY" <<'PYEOF'
 import json, sys
 jobs = json.loads(sys.argv[1])
 score, company = int(sys.argv[2]), sys.argv[3].strip()
 for j in jobs:
     if j.get("score") == score and j.get("company", "").startswith(company[:10]):
-        print(json.dumps(j))
-        sys.exit(0)
-# fallback: first match by company
+        print(json.dumps(j)); sys.exit(0)
 for j in jobs:
     if j.get("company", "").startswith(company[:10]):
-        print(json.dumps(j))
-        sys.exit(0)
+        print(json.dumps(j)); sys.exit(0)
 print("{}")
 PYEOF
 )
 
-  if [ "$JOB" = "{}" ]; then
-    gum style --foreground 196 "Could not find job details."
-    continue
-  fi
+  [ "$JOB" = "{}" ] && { gum style --foreground 196 "Could not find job details."; continue; }
 
-  # --- Detail view ---
   DETAIL=$(python3 - "$JOB" <<'PYEOF'
 import json, sys
 j = json.loads(sys.argv[1])
@@ -157,12 +210,12 @@ def bar(v):
     filled = round(v / 5)
     return "█" * filled + "░" * (20 - filled) + f"  {v}"
 
-s = j.get("scoring", {})
-match = ", ".join(j.get("matching_skills", [])) or "(none)"
-miss  = ", ".join(j.get("missing_skills",  [])) or "(none)"
-remote = "Yes" if j.get("remote") else "No"
+s      = j.get("scoring", {})
+match  = ", ".join(j.get("matching_skills", [])) or "(none)"
+miss   = ", ".join(j.get("missing_skills",  [])) or "(none)"
+remote  = "Yes" if j.get("remote") else "No"
 applied = j.get("date_applied") or "—"
-notes = j.get("notes") or "(none)"
+notes   = j.get("notes") or "(none)"
 
 lines = [
     f"{j.get('company','')} — {j.get('title','')}",
@@ -230,10 +283,8 @@ for j in data["jobs"]:
 
 with open(tj_path, "w") as f:
     json.dump(data, f, indent=2)
-print("ok")
 PYEOF
       gum style --foreground 212 "Status updated to: $NEW_STATUS"
-      # Refresh JOBS_JSON with updated status
       JOBS_JSON=$(python3 -c "
 import json, sys
 jobs = json.loads(sys.argv[1])
@@ -242,25 +293,11 @@ for j in jobs:
         j['status'] = sys.argv[3]
 print(json.dumps(jobs))
 " "$JOBS_JSON" "$JOB_ID" "$NEW_STATUS")
-      # Rebuild TSV
-      TSV=$(python3 - "$JOBS_JSON" <<'PYEOF'
-import json, sys
-jobs = json.loads(sys.argv[1])
-print("Score\tGrade\tCompany\tTitle\tLocation\tStatus")
-for j in jobs:
-    company = j.get("company", "")[:22]
-    title = j.get("title", "")[:30]
-    location = j.get("location", "")[:18]
-    print(f"{j.get('score',0)}\t{j.get('grade','?')}\t{company}\t{title}\t{location}\t{j.get('status','New')}")
-PYEOF
-)
+      TSV=$(build_tsv "$JOBS_JSON")
       sleep 1
       ;;
     "Quit")
       break
-      ;;
-    *)
-      continue
       ;;
   esac
   clear
