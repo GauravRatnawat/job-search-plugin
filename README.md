@@ -1,21 +1,34 @@
 # Job Search Assistant
 
-An **AI recruiter and job hunting assistant** that works with any AI coding agent. Analyzes resumes in depth, proactively hunts for jobs via web search, scores every match with fit scores out of 100, and delivers prioritized application lists with verified links.
+An **AI recruiter and job hunting assistant** that works with any AI coding agent. Analyzes resumes in depth, proactively hunts for jobs via web search, scores every match /100, and delivers prioritized application lists with verified links.
 
 **No dependencies. No setup. No API keys.** Pure skill instructions + native file I/O.
 
-## How to Use
+## Quick Start (Claude Code)
 
-This repo supports multiple AI platforms. Pick the one you use:
+```
+# 1. Install the plugin
+/plugin marketplace add GauravRatnawat/job-search-plugin
+/plugin install job-search@job-search-plugin
 
-| Platform | Entry Point | Setup |
-|----------|-------------|-------|
-| **Codex** | Open the repo in Codex. It reads `AGENTS.md` automatically. | None |
-| **Claude Code (standalone)** | Clone the repo and open it. Claude reads `CLAUDE.md` + `.claude/commands/`. | None |
-| **Claude Code (plugin)** | `/plugin marketplace add GauravRatnawat/job-search-plugin` then `/plugin install job-search@job-search-plugin` | None |
-| **Claude Projects** | Paste `plugin.md` into project knowledge. | None |
-| **Claude Code (skill)** | `ln -sf /path/to/repo/skill ~/.claude/skills/job-search` | None |
-| **Cursor / Copilot / Other** | Open the repo. The agent reads `AGENTS.md`. | None |
+# 2. Run the full pipeline
+/job-search:input-resume path/to/resume.pdf
+
+# 3. Follow up
+/job-search:tailor-resume <job number>
+/job-search:cover-letter <job number>
+/job-search:interview-prep <company>
+```
+
+## Install on Any Platform
+
+| Platform | How to Install | How to Use |
+|----------|---------------|------------|
+| **Claude Code (plugin)** | `/plugin marketplace add GauravRatnawat/job-search-plugin` then `/plugin install job-search@job-search-plugin` | `/job-search:<command>` |
+| **Claude Code (skill)** | `ln -sf /path/to/repo/skill ~/.claude/skills/job-search` | `/job-search` then chat |
+| **Claude Code (standalone)** | Clone repo, run `claude` from inside it | `/<command>` |
+| **Claude Projects** | Paste `plugin.md` into project knowledge | Chat naturally |
+| **Codex / Cursor / Copilot** | Clone repo, open it in your agent | Chat naturally — agent reads `AGENTS.md` |
 
 ## What It Does
 
@@ -28,18 +41,16 @@ This repo supports multiple AI platforms. Pick the one you use:
 
 ## Commands
 
-For Claude Code plugin users, commands are namespaced as `/job-search:<command>`.
-For standalone Claude Code users, commands are available as `/<command>`.
-For Codex and other agents, just ask in natural language.
+| Plugin (`/job-search:`) | Standalone (`/`) | What It Does |
+|------------------------|-----------------|--------------|
+| `/job-search:input-resume <path>` | `/input-resume <path>` | Full pipeline: parse resume, hunt 20+ jobs, score, deliver prioritized list |
+| `/job-search:tailor-resume <job>` | `/tailor-resume <job>` | Rewrite resume for a specific job from the scored list |
+| `/job-search:cover-letter <job>` | `/cover-letter <job>` | Write a personalized cover letter (<400 words) |
+| `/job-search:interview-prep <company>` | `/interview-prep <company>` | Generate behavioral + technical questions with STAR frameworks |
+| `/job-search:tracker <command>` | `/tracker <command>` | Manage tracker: save, view, update, summary |
+| `/job-search:apply <job_id or url>` | `/apply <job_id or url>` | Help with an application (provide URL, draft email) |
 
-| Command | What It Does |
-|---------|-------------|
-| `input-resume <path>` | Full pipeline: parse resume, hunt 20+ jobs, score, deliver prioritized list |
-| `tailor-resume <job>` | Rewrite resume for a specific job from the scored list |
-| `cover-letter <job>` | Write a personalized cover letter (<400 words) |
-| `interview-prep <company>` | Generate behavioral + technical questions with STAR frameworks |
-| `tracker <command>` | Manage tracker: save, view, update, summary |
-| `apply <job_id or url>` | Help with an application (provide URL, draft email) |
+For Codex and other agents, just ask in natural language.
 
 ## Pipeline Cache
 
@@ -52,7 +63,7 @@ Results are cached per-persona between sessions as JSON files in `.cache/<person
 | `search_results.json` | 2 days | Raw job listings |
 | `scored_jobs.json` | 2 days | Scored and ranked results |
 
-Each candidate gets isolated cache storage. The persona slug is derived from the profile name. The agent reads and writes these files directly.
+Each candidate gets isolated cache storage. The persona slug is derived from the profile name.
 
 ## Application Support
 
