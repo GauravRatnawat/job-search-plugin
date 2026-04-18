@@ -1,3 +1,8 @@
+---
+description: Generate behavioral and technical interview questions with STAR-format answer frameworks
+allowed-tools: Read, Write, Glob
+---
+
 Prepare for an interview at: $ARGUMENTS
 
 Use the `job-search:interview-prep` skill and follow its full instructions.

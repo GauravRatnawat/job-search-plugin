@@ -1,3 +1,8 @@
+---
+description: Parse a resume, hunt 20+ jobs via web search, score every match /100, and deliver a prioritized application list
+allowed-tools: Read, Write, Glob, WebSearch
+---
+
 **Before doing anything, check the pipeline cache.**
 
 Read the file `.cache/active_persona.txt` to get the current persona slug. If it doesn't exist, that's fine — a new persona will be created from the resume.

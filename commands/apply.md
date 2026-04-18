@@ -1,3 +1,8 @@
+---
+description: Help apply to a job — provide the direct URL, show profile details for copy-paste, or draft an email application
+allowed-tools: Read, Write, Glob
+---
+
 Help the user apply to a job: $ARGUMENTS
 
 The argument should be a tracker job ID or a direct URL.

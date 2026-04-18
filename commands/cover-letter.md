@@ -1,3 +1,8 @@
+---
+description: Write a personalized cover letter under 400 words for a specific job
+allowed-tools: Read, Write, Glob
+---
+
 Write a cover letter for: $ARGUMENTS
 
 Use the `job-search:cover-letter-writer` skill and follow its full instructions.

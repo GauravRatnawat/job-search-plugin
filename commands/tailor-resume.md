@@ -1,3 +1,8 @@
+---
+description: Rewrite the candidate's resume to target a specific job from the scored list
+allowed-tools: Read, Write, Glob
+---
+
 Tailor the candidate's resume for: $ARGUMENTS
 
 Use the `job-search:resume-tailor` skill and follow its full instructions.

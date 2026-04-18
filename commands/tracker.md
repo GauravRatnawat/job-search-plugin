@@ -1,3 +1,8 @@
+---
+description: Manage the job application tracker — save, view, update status, or get a pipeline summary
+allowed-tools: Read, Write, Glob
+---
+
 Manage the job application tracker. Command: $ARGUMENTS
 
 Use the `job-search:application-tracker` skill for pipeline rules, status definitions, and the JSON file format.
