@@ -23,3 +23,6 @@ __pycache__/
 
 # Planning / internal
 PLAN.md
+
+# Git worktrees
+.worktrees/
