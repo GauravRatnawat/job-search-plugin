@@ -14,6 +14,7 @@ This project is an AI recruiter workflow for Claude Code. Codex and other agents
 | `/interview-prep <company/role>` | Generate 5 behavioral + 5 technical questions with answer frameworks |
 | `/tracker <command>` | Manage job tracker: save, view, update, summary |
 | `/apply <job_id or url>` | Look up a job and help the user apply |
+| `/ats-check <job>` | Estimate how likely your resume passes ATS filtering for a specific role |
 
 ## Quick Start
 
