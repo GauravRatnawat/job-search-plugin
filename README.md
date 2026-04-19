@@ -40,6 +40,7 @@ Your **AI-powered job search companion**. Tell it your background, and it finds 
 | `/job-search:interview-prep <company>` | Get behavioral + technical questions with answer frameworks |
 | `/job-search:tracker <save\|view\|update\|summary>` | Track your applications |
 | `/job-search:apply <job or url>` | Get the direct link + draft an email application |
+| `/job-search:ats-check <job>` | Estimate how likely your resume passes ATS filtering for a specific role |
 
 ## How Jobs Are Scored
 
