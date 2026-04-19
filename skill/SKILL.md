@@ -142,6 +142,7 @@ After the list, suggest:
 - `/cover-letter <company>` to write a cover letter
 - `/interview-prep <company>` for interview prep
 - `/apply <job>` to help with an application
+- `/ats-check <job>` to check ATS compatibility for a target role
 
 ---
 
