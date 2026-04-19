@@ -69,6 +69,7 @@ Each step has a detailed instruction file. Read it before executing that step.
    - `skills/resume-tailor/SKILL.md` -- customize resume for a target job
    - `skills/cover-letter-writer/SKILL.md` -- write a personalized cover letter
    - `skills/interview-prep/SKILL.md` -- prepare for an interview
+   - `skills/ats-analyzer/SKILL.md` -- check if resume will pass ATS filtering for a target job
 
 ## Tracker
 
