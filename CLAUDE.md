@@ -44,8 +44,8 @@ The job tracker is a JSON file at `job_tracker.json`. See `skills/application-tr
 ## Project Structure
 
 ```
-.claude/commands/           6 slash commands (input-resume, tailor-resume, cover-letter, interview-prep, tracker, apply)
-skills/                     9 skill instruction documents
+.claude/commands/           7 slash commands (input-resume, tailor-resume, cover-letter, interview-prep, tracker, apply, ats-check)
+skills/                     10 skill instruction documents
   resume-parser/SKILL.md
   job-hunter/SKILL.md
   job-searcher/SKILL.md
