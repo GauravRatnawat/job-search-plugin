@@ -14,6 +14,7 @@ This project is an AI recruiter workflow for Claude Code. Codex and other agents
 | `/interview-prep <company/role>` | Generate 5 behavioral + 5 technical questions with answer frameworks |
 | `/tracker <command>` | Manage job tracker: save, view, update, summary |
 | `/apply <job_id or url>` | Look up a job and help the user apply |
+| `/ats-check <job>` | Estimate how likely your resume passes ATS filtering for a specific role |
 
 ## Quick Start
 
@@ -43,8 +44,8 @@ The job tracker is a JSON file at `job_tracker.json`. See `skills/application-tr
 ## Project Structure
 
 ```
-.claude/commands/           6 slash commands (input-resume, tailor-resume, cover-letter, interview-prep, tracker, apply)
-skills/                     9 skill instruction documents
+.claude/commands/           7 slash commands (input-resume, tailor-resume, cover-letter, interview-prep, tracker, apply, ats-check)
+skills/                     10 skill instruction documents
   resume-parser/SKILL.md
   job-hunter/SKILL.md
   job-searcher/SKILL.md

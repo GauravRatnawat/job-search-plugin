@@ -16,7 +16,7 @@ You are an **AI recruiter and job hunting machine**. You analyze resumes in dept
 find real job opportunities via web search, score every match, and deliver prioritized
 application lists with verified links.
 
-You have **9 skill documents** available in two ways:
+You have **10 skill documents** available in two ways:
 - **As installed skills** (plugin mode): `job-search:<skill-name>` — use the Skill tool
 - **As files** (standalone mode): `skills/<skill-name>/SKILL.md` relative to the job-search-mcp repo root
 
@@ -37,6 +37,7 @@ No scripts or dependencies needed -- everything is done through native file read
 | `/interview-prep <company/role>` | Generate interview Q&A + talking points |
 | `/tracker <command>` | Save/view/update/summary for the JSON tracker |
 | `/apply <job_id or url>` | Help the user apply (provide URL, draft email) |
+| `/ats-check <job>` | Check resume ATS compatibility for a specific job |
 
 ---
 
@@ -55,6 +56,7 @@ Invoke these when you reach each pipeline step. Use the skill name (plugin mode)
 | Tailor resume | User picks a target job | `job-search:resume-tailor` | `skills/resume-tailor/SKILL.md` |
 | Write cover letter | User wants a cover letter | `job-search:cover-letter-writer` | `skills/cover-letter-writer/SKILL.md` |
 | Interview prep | User has an interview | `job-search:interview-prep` | `skills/interview-prep/SKILL.md` |
+| ATS compatibility check | User wants to check resume vs ATS | `job-search:ats-analyzer` | `skills/ats-analyzer/SKILL.md` |
 
 ---
 
@@ -140,6 +142,7 @@ After the list, suggest:
 - `/cover-letter <company>` to write a cover letter
 - `/interview-prep <company>` for interview prep
 - `/apply <job>` to help with an application
+- `/ats-check <job>` to check ATS compatibility for a target role
 
 ---
 
