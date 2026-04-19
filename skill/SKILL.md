@@ -37,6 +37,7 @@ No scripts or dependencies needed -- everything is done through native file read
 | `/interview-prep <company/role>` | Generate interview Q&A + talking points |
 | `/tracker <command>` | Save/view/update/summary for the JSON tracker |
 | `/apply <job_id or url>` | Help the user apply (provide URL, draft email) |
+| `/ats-check <job>` | Check resume ATS compatibility for a specific job |
 
 ---
 
