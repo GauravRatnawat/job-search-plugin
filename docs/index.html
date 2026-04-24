@@ -549,7 +549,7 @@ body::before {
       <div class="cmd-card"><div class="tag">Prep</div><div class="name"><span class="s">/</span>interview-prep</div><div class="desc">5 behavioural + 5 technical questions with STAR-framed answer frameworks. Company-specific.</div><span class="badge">5 + 5 questions</span></div>
       <div class="cmd-card"><div class="tag">Tracking</div><div class="name"><span class="s">/</span>tracker</div><div class="desc">Save, view, and update your application pipeline. JSON-backed, read/write directly.</div><span class="badge">json store</span></div>
       <div class="cmd-card"><div class="tag">Apply</div><div class="name"><span class="s">/</span>apply</div><div class="desc">Look up a job by ID or URL. Get the link plus a drafted outreach email as a local file. Never auto-submits.</div><span class="badge">local draft</span></div>
-      <div class="cmd-card"><div class="tag">Utility</div><div class="name"><span class="s">/</span>view</div><div class="desc">Read active persona, scored jobs, and tracker summary from cache — no searches triggered.</div><span class="badge">cache-read</span></div>
+      <div class="cmd-card"><div class="tag">TUI</div><div class="name"><span class="s">/</span>view</div><div class="desc">Interactive terminal browser for scored jobs. Scroll listings, open links, update status — powered by <code style="font-family:var(--mono);font-size:.85em">gum</code>. Optional grade filter: <code style="font-family:var(--mono);font-size:.85em">/view A</code>.</div><span class="badge">requires gum</span></div>
       <div class="cmd-card"><div class="tag">Market</div><div class="name"><span class="s">/</span>market-check</div><div class="desc">Score resume fit for Berlin, DACH, Netherlands, or broader EU markets. Checks language, visa, stack preferences, salary benchmarks, and local job boards across 8 dimensions.</div><span class="badge new">beta</span></div>
     </div>
   </div>
@@ -588,6 +588,28 @@ body::before {
         <div class="step-n">04</div><div class="step-lbl">Deliver</div>
         <div class="step-title">Prioritised<br><em>list</em></div>
         <div class="step-desc">High (70+), Medium (55–69), Stretch (40–54). Recommended order, skills gap, additional boards.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" style="padding-top: 0; padding-bottom: 0; background: #1a1612; border-bottom: 1px solid #2e2a24;">
+  <div class="section-inner" style="max-width: 1360px;">
+    <div style="display:grid; grid-template-columns: 1fr 1fr; border-left: 1px solid #2e2a24; border-right: 1px solid #2e2a24;">
+      <div style="padding: 40px 48px; border-right: 1px solid #2e2a24;">
+        <p style="font-family:var(--mono); font-size:10px; letter-spacing:.2em; text-transform:uppercase; color:#5a5248; margin-bottom:14px;">Interactive TUI</p>
+        <p style="font-family:var(--serif); font-weight:300; font-size:clamp(24px,3vw,40px); line-height:1.05; letter-spacing:-.03em; color:#e8d8b8; margin-bottom:16px;">Browse jobs without<br><em style="color:#c2410c; font-style:italic">leaving the terminal</em></p>
+        <p style="font-size:13.5px; color:#7a8070; line-height:1.65; max-width:46ch;">Scroll through scored results, see per-dimension breakdowns, open application links, and update statuses — all in an interactive <code style="font-family:var(--mono); font-size:.9em; color:#c8c0b0">gum</code>-powered UI. No browser needed.</p>
+      </div>
+      <div style="padding: 40px 48px; display:flex; flex-direction:column; justify-content:center; gap:10px;">
+        <div style="background:#111109; border:1px solid #2e2a24; border-radius:4px; padding:14px 18px; font-family:var(--mono); font-size:12.5px; line-height:1.8; color:#c8c0b0;">
+          <span style="color:#5a5248"># one-time install</span><br>
+          <span style="color:#c2410c">brew</span> install gum
+        </div>
+        <div style="background:#111109; border:1px solid #2e2a24; border-radius:4px; padding:14px 18px; font-family:var(--mono); font-size:12.5px; line-height:1.8; color:#c8c0b0;">
+          <span style="color:#c2410c">/view</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#5a5248"># browse all grades</span><br>
+          <span style="color:#c2410c">/view</span> A&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#5a5248"># only grade A jobs</span>
+        </div>
       </div>
     </div>
   </div>
