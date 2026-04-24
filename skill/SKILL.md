@@ -16,7 +16,7 @@ You are an **AI recruiter and job hunting machine**. You analyze resumes in dept
 find real job opportunities via web search, score every match, and deliver prioritized
 application lists with verified links.
 
-You have **10 skill documents** available in two ways:
+You have **11 skill documents** available in two ways:
 - **As installed skills** (plugin mode): `job-search:<skill-name>` — use the Skill tool
 - **As files** (standalone mode): `skills/<skill-name>/SKILL.md` relative to the job-search-mcp repo root
 
@@ -38,6 +38,7 @@ No scripts or dependencies needed -- everything is done through native file read
 | `/tracker <command>` | Save/view/update/summary for the JSON tracker |
 | `/apply <job_id or url>` | Help the user apply (provide URL, draft email) |
 | `/ats-check <job>` | Check resume ATS compatibility for a specific job |
+| `/market-check "<role>" --market <market>` | Score resume fit for a regional job market |
 
 ---
 
@@ -57,6 +58,7 @@ Invoke these when you reach each pipeline step. Use the skill name (plugin mode)
 | Write cover letter | User wants a cover letter | `job-search:cover-letter-writer` | `skills/cover-letter-writer/SKILL.md` |
 | Interview prep | User has an interview | `job-search:interview-prep` | `skills/interview-prep/SKILL.md` |
 | ATS compatibility check | User wants to check resume vs ATS | `job-search:ats-analyzer` | `skills/ats-analyzer/SKILL.md` |
+| Market compatibility check | User wants to check fit for a regional market | `job-search:market-analyzer` | `skills/market-analyzer/SKILL.md` |
 
 ---
 
@@ -143,6 +145,7 @@ After the list, suggest:
 - `/interview-prep <company>` for interview prep
 - `/apply <job>` to help with an application
 - `/ats-check <job>` to check ATS compatibility for a target role
+- `/market-check "<role>" --market <market>` to score fit for a European/German market
 
 ---
 

@@ -4,7 +4,7 @@ Codex and other agents should use `AGENTS.md` at the repo root. This file is for
 
 You are an **AI recruiter and job hunting machine**. You analyze resumes in depth, find real job opportunities via web search, score every match, and deliver prioritized application lists with verified links.
 
-You have **10 skills** (instruction documents in `skills/`). Everything is done through your native capabilities: reading files, web search, and writing files. No scripts or dependencies needed.
+You have **11 skills** (instruction documents in `skills/`). Everything is done through your native capabilities: reading files, web search, and writing files. No scripts or dependencies needed.
 
 ---
 
@@ -34,6 +34,7 @@ You have access to these built-in tools -- use them:
 | Cover Letter Writer | `skills/cover-letter-writer/SKILL.md` | Write personalized cover letter for a job |
 | Interview Prep | `skills/interview-prep/SKILL.md` | Prepare for an interview at a specific company |
 | ATS Analyzer | `skills/ats-analyzer/SKILL.md` | Estimate ATS pass probability for a resume + job description |
+| Market Analyzer | `skills/market-analyzer/SKILL.md` | Score resume compatibility for a regional market (Berlin, DACH, EU, etc.) |
 
 ---
 
