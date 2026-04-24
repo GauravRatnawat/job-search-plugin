@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Job Search — AI Recruiter for Claude Code</title>
+<meta name="description" content="An AI recruiter workflow for Claude Code. Parse your resume, hunt 20+ real jobs, score every match, and ship tailored applications — no APIs, no setup.">
+<meta property="og:title" content="Job Search — AI Recruiter for Claude Code">
+<meta property="og:url" content="https://gauravratnawat.com/job-search/">
+<link rel="canonical" href="https://gauravratnawat.com/job-search/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300;1,9..144,400&family=Inter+Tight:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:        #f2ede4;
+  --bg-elev:   #ebe4d6;
+  --bg-deep:   #e2d9c8;
+  --ink:       #17140f;
+  --ink-dim:   #4b463d;
+  --ink-mute:  #857e71;
+  --rule:      #d6cdb9;
+  --rule-soft: #e2dbc9;
+  --accent:    #c2410c;
+  --accent-2:  #7a4a14;
+  --good:      #4a7c59;
+
+  --serif: "Fraunces", ui-serif, Georgia, serif;
+  --sans:  "Inter Tight", ui-sans-serif, system-ui, sans-serif;
+  --mono:  "JetBrains Mono", ui-monospace, monospace;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+a { color: inherit; text-decoration: none; }
+img, svg { display: block; }
+::selection { background: var(--accent); color: #fff; }
+
+body::before {
+  content: "";
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  opacity: .045;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='0.5'/></svg>");
+}
+
+.topbar {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 50;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 clamp(20px, 4vw, 56px);
+  background: color-mix(in oklab, var(--bg) 85%, transparent);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--rule-soft);
+}
+.topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+}
+.topbar-left .pip {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 8px color-mix(in oklab, var(--accent) 60%, transparent);
+  animation: breathe 2.8s ease-in-out infinite;
+}
+@keyframes breathe { 0%,100%{opacity:1} 55%{opacity:.3} }
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+}
+.topbar-right a { transition: color .2s; }
+.topbar-right a:hover { color: var(--accent); }
+.topbar-right .back::before { content: "← "; }
+
+.hero {
+  min-height: 100vh;
+  padding-top: 52px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border-bottom: 1px solid var(--rule);
+}
+.hero-left {
+  padding: clamp(48px, 8vh, 96px) clamp(20px, 4vw, 56px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-right: 1px solid var(--rule);
+}
+.hero-kicker {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.hero-kicker::before {
+  content: "";
+  width: 28px; height: 1px;
+  background: var(--accent);
+  display: block;
+}
+.hero-h {
+  font-family: var(--serif);
+  font-weight: 300;
+  font-size: clamp(52px, 7vw, 108px);
+  line-height: .9;
+  letter-spacing: -.04em;
+  margin-top: 28px;
+}
+.hero-h em { font-style: italic; color: var(--accent-2); }
+.hero-body {
+  margin-top: 32px;
+  font-size: 16px;
+  color: var(--ink-dim);
+  line-height: 1.65;
+  max-width: 44ch;
+}
+.hero-foot {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--rule);
+  border: 1px solid var(--rule);
+  margin-top: 52px;
+}
+.hero-stat { background: var(--bg); padding: 18px 20px; }
+.hero-stat .n {
+  font-family: var(--serif);
+  font-weight: 300;
+  font-size: 36px;
+  line-height: 1;
+  letter-spacing: -.03em;
+}
+.hero-stat .l {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--ink-mute);
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  margin-top: 6px;
+}
+
+.hero-right {
+  background: var(--bg-elev);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(28px, 4vw, 56px);
+}
+.term {
+  width: 100%;
+  max-width: 580px;
+  background: #1a1612;
+  border-radius: 8px;
+  border: 1px solid #2e2a24;
+  overflow: hidden;
+  font-family: var(--mono);
+  font-size: 13px;
+  box-shadow: 0 24px 80px -20px rgba(0,0,0,.4);
+}
+.term-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  background: #111109;
+  border-bottom: 1px solid #2e2a24;
+}
+.term-bar .dot { width: 11px; height: 11px; border-radius: 50%; }
+.term-bar .dot.r { background: #ff5f56; }
+.term-bar .dot.y { background: #ffbd2e; }
+.term-bar .dot.g { background: #27c93f; }
+.term-bar .title {
+  flex: 1; text-align: center;
+  font-family: var(--mono); font-size: 11px;
+  color: #5a5248; letter-spacing: .08em;
+}
+.term-body { padding: 20px 22px 24px; line-height: 1.75; color: #c8c0b0; }
+.term-body .p   { color: #7a9e6a; }
+.term-body .cmd { color: #e8d8b8; }
+.term-body .sl  { color: var(--accent); }
+.term-body .out { color: #7a8070; }
+.term-body .hi  { color: #e8c878; }
+.term-body .ok  { color: #7a9e6a; }
+.term-body .line { display: block; }
+.term-body .gap  { display: block; height: 10px; }
+.caret {
+  display: inline-block;
+  width: 8px; height: 14px;
+  background: #ffb347;
+  vertical-align: middle;
+  margin-left: 2px;
+  animation: blink 1s steps(2,end) infinite;
+}
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+.section {
+  padding: clamp(64px, 10vh, 112px) clamp(20px, 4vw, 56px);
+  border-bottom: 1px solid var(--rule);
+}
+.section-inner { max-width: 1360px; margin: 0 auto; }
+.label {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+}
+.section-title {
+  font-family: var(--serif);
+  font-weight: 300;
+  font-size: clamp(36px, 5vw, 72px);
+  line-height: .95;
+  letter-spacing: -.03em;
+  margin-top: 14px;
+}
+.section-title em { font-style: italic; color: var(--accent-2); }
+
+.cmd-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: var(--rule);
+  border: 1px solid var(--rule);
+  margin-top: 48px;
+}
+.cmd-card {
+  background: var(--bg);
+  padding: 28px 26px 32px;
+  transition: background .25s;
+}
+.cmd-card:hover { background: var(--bg-elev); }
+.cmd-card .tag {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 14px;
+}
+.cmd-card .name {
+  font-family: var(--mono);
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--ink);
+  letter-spacing: .01em;
+  margin-bottom: 12px;
+}
+.cmd-card .name .s { color: var(--accent); }
+.cmd-card .desc { font-size: 13.5px; color: var(--ink-dim); line-height: 1.6; }
+.cmd-card .badge {
+  display: inline-block;
+  margin-top: 18px;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  padding: 4px 8px;
+  border: 1px solid var(--rule);
+  color: var(--ink-mute);
+  border-radius: 2px;
+}
+.cmd-card .badge.new {
+  border-color: color-mix(in oklab, var(--accent) 50%, transparent);
+  color: var(--accent);
+}
+
+.steps-row {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  margin-top: 52px;
+  border: 1px solid var(--rule);
+}
+.step {
+  padding: 28px 24px 32px;
+  border-right: 1px solid var(--rule);
+  position: relative;
+}
+.step:last-child { border-right: 0; }
+.step-n {
+  font-family: var(--serif);
+  font-weight: 300;
+  font-size: 52px;
+  line-height: 1;
+  letter-spacing: -.04em;
+  color: var(--rule);
+  margin-bottom: 20px;
+  transition: color .3s;
+}
+.step:hover .step-n { color: var(--accent-2); }
+.step-lbl {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 8px;
+}
+.step-title {
+  font-family: var(--serif);
+  font-weight: 300;
+  font-size: 20px;
+  line-height: 1.2;
+  letter-spacing: -.02em;
+  margin-bottom: 10px;
+}
+.step-title em { font-style: italic; color: var(--accent-2); }
+.step-desc { font-size: 13px; color: var(--ink-dim); line-height: 1.6; }
+.step-arrow {
+  position: absolute;
+  top: 28px; right: -14px;
+  z-index: 1;
+  font-family: var(--mono);
+  font-size: 14px;
+  color: var(--accent);
+  background: var(--bg-elev);
+  width: 28px; height: 28px;
+  display: flex; align-items: center; justify-content: center;
+  border: 1px solid var(--rule);
+  border-radius: 50%;
+}
+.step:last-child .step-arrow { display: none; }
+
+.score-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  align-items: start;
+  margin-top: 48px;
+}
+.score-explain { font-size: 15.5px; color: var(--ink-dim); line-height: 1.7; max-width: 46ch; }
+.score-explain p + p { margin-top: 14px; }
+.score-bars { display: grid; gap: 18px; }
+.score-bar-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 8px;
+}
+.score-bar-head .dim-name { font-family: var(--mono); font-size: 11.5px; color: var(--ink); letter-spacing: .04em; }
+.score-bar-head .dim-pct { font-family: var(--serif); font-size: 22px; font-weight: 300; letter-spacing: -.02em; }
+.score-bar-track { height: 4px; background: var(--rule); border-radius: 2px; overflow: hidden; }
+.score-bar-fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 2px;
+  transform-origin: left;
+  transform: scaleX(0);
+  animation: grow .8s cubic-bezier(.4,0,.2,1) forwards;
+}
+@keyframes grow { to { transform: scaleX(1); } }
+.score-bar-fill.d2 { animation-delay: .1s; }
+.score-bar-fill.d3 { animation-delay: .2s; }
+.score-bar-fill.d4 { animation-delay: .3s; }
+.score-bar-fill.d5 { animation-delay: .4s; }
+
+.grade-strip {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1px;
+  background: var(--rule);
+  border: 1px solid var(--rule);
+  margin-top: 36px;
+}
+.grade-cell { background: var(--bg); padding: 16px 14px; text-align: center; }
+.grade-cell .g { font-family: var(--serif); font-size: 28px; font-weight: 300; line-height: 1; letter-spacing: -.02em; }
+.grade-cell .r { font-family: var(--mono); font-size: 10px; color: var(--ink-mute); letter-spacing: .1em; margin-top: 6px; }
+.grade-cell .p { font-family: var(--mono); font-size: 11px; color: var(--ink-dim); margin-top: 4px; }
+.grade-a .g { color: var(--good); }
+.grade-b .g { color: color-mix(in oklab, var(--good) 70%, var(--ink)); }
+.grade-d .g { color: var(--ink-mute); }
+.grade-f .g { color: #c25a4a; }
+
+.meta-strip {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+  margin-top: 48px;
+}
+.meta-item { padding: 28px 24px; border-right: 1px solid var(--rule); }
+.meta-item:last-child { border-right: 0; }
+.meta-item .k { font-family: var(--mono); font-size: 10px; letter-spacing: .18em; text-transform: uppercase; color: var(--ink-mute); margin-bottom: 10px; }
+.meta-item .v { font-family: var(--serif); font-weight: 300; font-size: 42px; line-height: 1; letter-spacing: -.04em; }
+.meta-item .v sup { font-family: var(--mono); font-size: .38em; letter-spacing: 0; color: var(--accent); vertical-align: super; }
+.meta-item .d { font-family: var(--mono); font-size: 11px; color: var(--ink-mute); margin-top: 8px; }
+
+.cta-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border: 1px solid var(--rule);
+  margin-top: 48px;
+}
+.cta-left { padding: 48px 52px; border-right: 1px solid var(--rule); background: var(--bg-elev); }
+.cta-right { padding: 48px 52px; }
+.cta-h { font-family: var(--serif); font-weight: 300; font-size: clamp(28px, 3vw, 42px); line-height: 1.05; letter-spacing: -.03em; margin-bottom: 18px; }
+.cta-h em { font-style: italic; color: var(--accent-2); }
+.cta-body { font-size: 14.5px; color: var(--ink-dim); line-height: 1.65; margin-bottom: 24px; max-width: 44ch; }
+.code-block {
+  background: #1a1612;
+  border: 1px solid #2e2a24;
+  border-radius: 4px;
+  padding: 16px 18px;
+  font-family: var(--mono);
+  font-size: 12.5px;
+  line-height: 1.8;
+  color: #c8c0b0;
+  overflow-x: auto;
+}
+.code-block .c  { color: var(--accent); }
+.code-block .cm { color: #5a5248; }
+.code-block + .code-block { margin-top: 10px; }
+
+.bottom-bar {
+  padding: 24px clamp(20px, 4vw, 56px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--ink-mute);
+  letter-spacing: .08em;
+}
+.bottom-bar a { transition: color .2s; }
+.bottom-bar a:hover { color: var(--accent); }
+
+@media (max-width: 1100px) {
+  .cmd-grid { grid-template-columns: repeat(2, 1fr); }
+  .steps-row { grid-template-columns: 1fr 1fr; }
+  .step { border-bottom: 1px solid var(--rule); }
+  .step:last-child { border-bottom: 0; }
+  .step-arrow { display: none; }
+}
+@media (max-width: 860px) {
+  .hero { grid-template-columns: 1fr; min-height: auto; }
+  .hero-right { display: none; }
+  .hero-left { border-right: 0; }
+  .score-layout { grid-template-columns: 1fr; gap: 36px; }
+  .cta-layout { grid-template-columns: 1fr; }
+  .cta-left { border-right: 0; border-bottom: 1px solid var(--rule); }
+  .meta-strip { grid-template-columns: repeat(2, 1fr); }
+  .grade-strip { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 600px) {
+  .cmd-grid { grid-template-columns: 1fr; }
+  .steps-row { grid-template-columns: 1fr; }
+  .hero-foot { grid-template-columns: 1fr 1fr; }
+  .meta-strip { grid-template-columns: 1fr 1fr; }
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-left">
+    <span class="pip"></span>
+    <span>Job Search · Claude Code</span>
+  </div>
+  <div class="topbar-right">
+    <span>10 skills · 0 deps</span>
+    <a class="back" href="https://gauravratnawat.com/">gauravratnawat.com</a>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero-left">
+    <div>
+      <p class="hero-kicker">AI Recruiter Workflow</p>
+      <h1 class="hero-h">Hunt.<br>Score.<br><em>Apply.</em></h1>
+      <p class="hero-body">An AI recruiter built for Claude Code. Parse your resume, find 20+ real jobs, score every match across five dimensions, and ship tailored applications — no APIs, no scripts, no setup.</p>
+    </div>
+    <div class="hero-foot">
+      <div class="hero-stat"><div class="n">10</div><div class="l">Skills</div></div>
+      <div class="hero-stat"><div class="n">8</div><div class="l">Commands</div></div>
+      <div class="hero-stat"><div class="n">0</div><div class="l">Setup</div></div>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="term">
+      <div class="term-bar">
+        <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+        <span class="title">claude — job-search</span>
+      </div>
+      <div class="term-body">
+        <span class="line"><span class="p">gaurav</span><span class="out">:~/job-search $</span> <span class="cmd"><span class="sl">/</span>input-resume resume.pdf</span></span>
+        <span class="gap"></span>
+        <span class="line"><span class="out">▸ Parsing resume...</span></span>
+        <span class="line"><span class="ok">✓</span><span class="out"> Profile: Senior Backend Engineer · Berlin</span></span>
+        <span class="line"><span class="out">  Skills: Go, Kubernetes, PostgreSQL, +14</span></span>
+        <span class="gap"></span>
+        <span class="line"><span class="out">▸ Hunting 20+ jobs across 8 boards...</span></span>
+        <span class="line"><span class="ok">✓</span><span class="out"> Found 27 listings</span></span>
+        <span class="gap"></span>
+        <span class="line"><span class="out">▸ Scoring all results (5 dimensions)...</span></span>
+        <span class="line"><span class="ok">✓</span><span class="out"> Scored 27 jobs</span></span>
+        <span class="gap"></span>
+        <span class="line"><span class="hi">🟢 HIGH PROBABILITY (12 jobs)</span></span>
+        <span class="line"><span class="out">  #1  Zalando — Staff Engineer     </span><span class="ok">91/100 A</span></span>
+        <span class="line"><span class="out">  #2  Klarna — Backend Lead        </span><span class="ok">87/100 A</span></span>
+        <span class="line"><span class="out">  #3  Delivery Hero — Sr. Engineer </span><span class="hi">82/100 B</span></span>
+        <span class="gap"></span>
+        <span class="line"><span class="p">gaurav</span><span class="out">:~/job-search $</span> <span class="caret"></span></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-inner">
+    <p class="label">01 — Commands</p>
+    <h2 class="section-title">Eight slash<br><em>commands</em></h2>
+    <div class="cmd-grid">
+      <div class="cmd-card"><div class="tag">Core</div><div class="name"><span class="s">/</span>input-resume</div><div class="desc">Full pipeline in one command. Parse resume, hunt 20+ jobs, score every listing, deliver a prioritised list.</div><span class="badge">entry point</span></div>
+      <div class="cmd-card"><div class="tag">Tailoring</div><div class="name"><span class="s">/</span>tailor-resume</div><div class="desc">Rewrite your resume for a specific role. Keyword-optimised, role-aligned, saved as a separate version.</div><span class="badge">per-job</span></div>
+      <div class="cmd-card"><div class="tag">Tailoring</div><div class="name"><span class="s">/</span>cover-letter</div><div class="desc">Personalised cover letter under 400 words. Draws from parsed profile and the specific job's language.</div><span class="badge">&lt; 400 words</span></div>
+      <div class="cmd-card"><div class="tag">ATS</div><div class="name"><span class="s">/</span>ats-check</div><div class="desc">Estimate ATS pass probability. Keywords, section headers, formatting, title alignment — all scored.</div><span class="badge new">new</span></div>
+      <div class="cmd-card"><div class="tag">Prep</div><div class="name"><span class="s">/</span>interview-prep</div><div class="desc">5 behavioural + 5 technical questions with STAR-framed answer frameworks. Company-specific.</div><span class="badge">5 + 5 questions</span></div>
+      <div class="cmd-card"><div class="tag">Tracking</div><div class="name"><span class="s">/</span>tracker</div><div class="desc">Save, view, and update your application pipeline. JSON-backed, read/write directly.</div><span class="badge">json store</span></div>
+      <div class="cmd-card"><div class="tag">Apply</div><div class="name"><span class="s">/</span>apply</div><div class="desc">Look up a job by ID or URL. Get the link plus a drafted outreach email as a local file. Never auto-submits.</div><span class="badge">local draft</span></div>
+      <div class="cmd-card"><div class="tag">Utility</div><div class="name"><span class="s">/</span>view</div><div class="desc">Read active persona, scored jobs, and tracker summary from cache — no searches triggered.</div><span class="badge">cache-read</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" style="background: var(--bg-elev);">
+  <div class="section-inner">
+    <p class="label">02 — Pipeline</p>
+    <h2 class="section-title">How it<br><em>works</em></h2>
+    <div class="steps-row">
+      <div class="step">
+        <div class="step-arrow">→</div>
+        <div class="step-n">00</div><div class="step-lbl">Cache</div>
+        <div class="step-title">Check what's<br><em>fresh</em></div>
+        <div class="step-desc">Every session reads the active persona and checks each stage file against its TTL. Fresh stages are skipped.</div>
+      </div>
+      <div class="step">
+        <div class="step-arrow">→</div>
+        <div class="step-n">01</div><div class="step-lbl">Parse</div>
+        <div class="step-title">Deep resume<br><em>analysis</em></div>
+        <div class="step-desc">Skills extracted from every section — projects, certs, experience. Strategic level and target role assessment.</div>
+      </div>
+      <div class="step">
+        <div class="step-arrow">→</div>
+        <div class="step-n">02</div><div class="step-lbl">Hunt</div>
+        <div class="step-title">20+ real<br><em>listings</em></div>
+        <div class="step-desc">Multi-query search across LinkedIn, Naukri, Wellfound, StepStone, BuiltIn, and direct career pages. Location-aware.</div>
+      </div>
+      <div class="step">
+        <div class="step-arrow">→</div>
+        <div class="step-n">03</div><div class="step-lbl">Score</div>
+        <div class="step-title">Five-dimension<br><em>fit score</em></div>
+        <div class="step-desc">Skill match, experience level, description relevance, location, and title alignment weighted into a 0–100 grade.</div>
+      </div>
+      <div class="step">
+        <div class="step-n">04</div><div class="step-lbl">Deliver</div>
+        <div class="step-title">Prioritised<br><em>list</em></div>
+        <div class="step-desc">High (70+), Medium (55–69), Stretch (40–54). Recommended order, skills gap, additional boards.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-inner">
+    <p class="label">03 — Scoring</p>
+    <h2 class="section-title">Honest fit,<br><em>five dimensions</em></h2>
+    <div class="score-layout">
+      <div>
+        <div class="score-explain">
+          <p>Every job is scored against your resume across five weighted dimensions. Scores are honest — a 45/100 stretch role is useful information. Synonyms are resolved. Fresher projects count as experience.</p>
+          <p>Final grade maps to a probability category: A/B ship immediately, C needs a tailored resume, D is aspirational, F is skipped.</p>
+        </div>
+        <div class="grade-strip">
+          <div class="grade-cell grade-a"><div class="g">A</div><div class="r">85–100</div><div class="p">Apply now</div></div>
+          <div class="grade-cell grade-b"><div class="g">B</div><div class="r">70–84</div><div class="p">Strong match</div></div>
+          <div class="grade-cell"><div class="g">C</div><div class="r">55–69</div><div class="p">Tailor first</div></div>
+          <div class="grade-cell grade-d"><div class="g">D</div><div class="r">40–54</div><div class="p">Aspirational</div></div>
+          <div class="grade-cell grade-f"><div class="g">F</div><div class="r">0–39</div><div class="p">Skip</div></div>
+        </div>
+      </div>
+      <div class="score-bars">
+        <div class="score-bar-row"><div class="score-bar-head"><span class="dim-name">Skill Match</span><span class="dim-pct">30%</span></div><div class="score-bar-track"><div class="score-bar-fill" style="width:30%"></div></div></div>
+        <div class="score-bar-row"><div class="score-bar-head"><span class="dim-name">Experience Level</span><span class="dim-pct">25%</span></div><div class="score-bar-track"><div class="score-bar-fill d2" style="width:25%"></div></div></div>
+        <div class="score-bar-row"><div class="score-bar-head"><span class="dim-name">Description Relevance</span><span class="dim-pct">25%</span></div><div class="score-bar-track"><div class="score-bar-fill d3" style="width:25%"></div></div></div>
+        <div class="score-bar-row"><div class="score-bar-head"><span class="dim-name">Location Match</span><span class="dim-pct">10%</span></div><div class="score-bar-track"><div class="score-bar-fill d4" style="width:10%"></div></div></div>
+        <div class="score-bar-row"><div class="score-bar-head"><span class="dim-name">Title Alignment</span><span class="dim-pct">10%</span></div><div class="score-bar-track"><div class="score-bar-fill d5" style="width:10%"></div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" style="background: var(--bg-elev); padding-top: 0; padding-bottom: 0;">
+  <div class="section-inner">
+    <div class="meta-strip">
+      <div class="meta-item"><div class="k">Profile cache</div><div class="v">30<sup>d</sup></div><div class="d">profile.json TTL</div></div>
+      <div class="meta-item"><div class="k">Search strategy</div><div class="v">7<sup>d</sup></div><div class="d">search_strategy.json TTL</div></div>
+      <div class="meta-item"><div class="k">Job results</div><div class="v">2<sup>d</sup></div><div class="d">search_results.json TTL</div></div>
+      <div class="meta-item"><div class="k">Scored jobs</div><div class="v">2<sup>d</sup></div><div class="d">scored_jobs.json TTL</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-inner">
+    <p class="label">04 — Get Started</p>
+    <h2 class="section-title">Zero setup.<br><em>Start now.</em></h2>
+    <div class="cta-layout">
+      <div class="cta-left">
+        <h3 class="cta-h">Claude Code<br><em>CLI</em></h3>
+        <p class="cta-body">Clone and link as a skill. All 8 slash commands become available immediately in any session.</p>
+        <div class="code-block"><span class="c">git</span> clone github.com/GauravRatnawat/job-search
+<span class="c">ln</span> -sf "$(pwd)/skill" ~/.claude/skills/job-search</div>
+        <div class="code-block"><span class="cm"># In any Claude Code session:</span>
+<span class="c">/input-resume</span> ~/Documents/resume.pdf</div>
+      </div>
+      <div class="cta-right">
+        <h3 class="cta-h">Claude<br><em>Projects</em></h3>
+        <p class="cta-body">Paste <code style="font-family:var(--mono);font-size:.9em;background:var(--bg-elev);border:1px solid var(--rule);border-radius:2px;padding:1px 6px">plugin.md</code> into project instructions. No clone needed.</p>
+        <div class="code-block"><span class="cm"># Claude Projects → Instructions:</span>
+<span class="cm"># paste contents of plugin.md</span></div>
+        <div class="code-block"><span class="cm"># Then just say:</span>
+"Here's my resume:" <span class="cm">→ paste or upload CV</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="bottom-bar">
+  <span>Job Search · Claude Code Workflow</span>
+  <span>gauravratnawat.com/job-search</span>
+  <a href="https://gauravratnawat.com/">← gauravratnawat.com</a>
+</footer>
+
+</body>
+</html>
