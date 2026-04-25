@@ -1,5 +1,7 @@
 # Job Search Assistant
 
+**[gauravratnawat.com/job-search-plugin](https://gauravratnawat.com/job-search-plugin/)**
+
 Your **AI-powered job search companion**. Tell it your background, and it finds real jobs, scores every match against your profile, and helps you apply — tailored resume, cover letter, interview prep, and all.
 
 **No dependencies. No setup. No API keys.**
