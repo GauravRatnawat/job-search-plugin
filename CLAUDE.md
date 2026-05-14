@@ -16,6 +16,7 @@ This project is an AI recruiter workflow for Claude Code. Codex and other agents
 | `/apply <job_id or url>` | Look up a job and help the user apply |
 | `/ats-check <job>` | Estimate how likely your resume passes ATS filtering for a specific role |
 | `/market-check "<role>" --market <market>` | Score resume compatibility for a regional market (Berlin, DACH, Netherlands, etc.) |
+| `/rate-resume` | Score resume quality: Impact, Brevity, Style, Sections — with line-level rewrites and fix list |
 
 ## Quick Start
 
@@ -45,8 +46,8 @@ The job tracker is a JSON file at `job_tracker.json`. See `skills/application-tr
 ## Project Structure
 
 ```
-.claude/commands/           8 slash commands (input-resume, tailor-resume, cover-letter, interview-prep, tracker, apply, ats-check, market-check)
-skills/                     11 skill instruction documents
+.claude/commands/           9 slash commands (input-resume, tailor-resume, cover-letter, interview-prep, tracker, apply, ats-check, market-check, rate-resume)
+skills/                     12 skill instruction documents
   resume-parser/SKILL.md
   job-hunter/SKILL.md
   job-searcher/SKILL.md
@@ -58,6 +59,7 @@ skills/                     11 skill instruction documents
   interview-prep/SKILL.md
   ats-analyzer/SKILL.md
   market-analyzer/SKILL.md
+  resume-rater/SKILL.md
 skill/SKILL.md              Installable Claude Code skill (orchestrator)
 AGENTS.md                   Codex / generic agent instructions
 plugin.md                   Claude Projects orchestrator
