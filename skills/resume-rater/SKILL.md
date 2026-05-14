@@ -71,6 +71,11 @@ verb_score = clamp((strong_count - passive_count) / total_bullets × 50 + 50, 0,
 impact_score = clamp(round(quantified_ratio × 60 + verb_score × 0.40), 0, 100)
 ```
 
+Note: quantified outcomes (numbers, %, $) contribute up to 60 pts; verb quality
+contributes up to 40 pts. A resume with strong verbs but no metrics cannot score
+above 40. When giving Impact feedback, always explain this to the user — both
+dimensions matter, but quantification is the dominant factor.
+
 If total_bullets = 0: impact_score = 50 (cannot assess).
 
 **Flag for feedback (up to 5 bullets, worst first):**
@@ -84,6 +89,13 @@ For each flagged bullet, write a rewritten version that:
 ---
 
 ### Dimension 2 — Brevity (weight: 25%)
+
+**Cache mode limitation:** Sub-score A (word count) and Sub-score C (filler phrases)
+require full resume text. In cache mode, only Sub-score B (bullet length) is available
+from `experience[].bullets[]`. In cache mode: set Sub-score A = 80 (assumed reasonable)
+and Sub-score C = 100 (cannot check). Show this banner in the Brevity section output:
+  ⚠️ Cache mode: word count and filler-phrase checks unavailable. For full Brevity
+     analysis: `/rate-resume --resume ~/path/to/resume.pdf`
 
 **What Brevity measures:** Recruiters spend 6–10 seconds on first pass. Dense, padded,
 or run-on resumes get skipped. Every word should earn its place.
@@ -104,6 +116,7 @@ For each bullet, count words:
 >20 words   → -8 per bullet (flag these)
 16–20 words → -3 per bullet
 <8 words    → -3 per bullet (too terse)
+8–9 words   → -1 per bullet (slightly terse)
 10–15 words →  0 (ideal)
 ```
 Cap total deduction at -30.
@@ -146,6 +159,10 @@ All experience and education dates must follow the same format.
 Detected formats: `MM/YYYY`, `Month YYYY` (e.g., "Jan 2022"), `YYYY` only.
 If more than one format found across entries: -5 per inconsistent entry. Cap at -15.
 
+In cache mode, read `experience[].start` and `experience[].end` as strings. Treat a
+missing `end` field (or the value `null`) as "Present" — this is not a format error.
+Only flag inconsistency across entries where dates are present.
+
 **Calculate:**
 ```
 style_score = clamp(round((check_A + check_B + check_C) / 3), 0, 100)
@@ -183,9 +200,15 @@ Detect role category from target_role string:
 - Contains "Data Scientist", "ML Engineer", "Research" →
   `Projects` or `Publications` expected. Missing: -10.
 
-**Calculate:**
+**Calculate (start at 100, subtract deductions):**
+
+All penalty values above are negative integers (e.g. "missing: -25" means subtract 25).
 ```
-sections_score = clamp(100 + required_penalty + recommended_penalty + role_penalty, 0, 100)
+sections_score = clamp(100
+  + required_penalty      ← 0 or negative
+  + recommended_penalty   ← 0 or negative
+  + role_penalty,         ← 0 or negative
+  0, 100)
 ```
 
 **Flag for feedback:** each missing section with:
@@ -228,6 +251,16 @@ overall score and assign priority:
 +1 to +2 pts   → 🟢 LOW
 ```
 
+**How to estimate point impact per fix:**
+- Quantifying one bullet: ≈ `0.30 × (60 / total_bullets)` pts overall
+- Adding a strong verb (replacing passive): ≈ `0.30 × (40 / total_bullets)` pts overall
+- Trimming one >20-word bullet: ≈ `0.25 × (8 / 3)` pts overall (~0.7 pts, round to 1)
+- Removing one personal pronoun: ≈ `0.25 × (5 / 3)` pts overall (~0.4 pts, round to 1)
+- Fixing one tense violation: ≈ `0.25 × (8 / 3)` pts overall (~0.7 pts, round to 1)
+- Adding a missing required section: ≈ `0.20 × missing_penalty` pts overall
+  (e.g. missing Experience -25 → +5 pts overall)
+Round all estimates to nearest integer. Use these to fill the Impact column in the table.
+
 Order all fixes by descending point impact.
 
 `estimated_after = clamp(overall + sum_of_all_fix_impacts, 0, 100)`
@@ -245,7 +278,7 @@ score 45 → round to 50 → █████░░░░░
 Filled block: █   Empty block: ░
 
 **Line reference rules:**
-- Full mode: `Line 14`
+- Full mode: `Line 14` (line of the raw text file or pasted text, 1-indexed from top)
 - Cache mode: `[Company] — [Title], bullet [N]` (1-indexed)
 
 Use this exact output structure:
@@ -326,3 +359,10 @@ sections hurt this specific target_role. Be role-specific.]
 
 Estimated score after all fixes: ~[estimated_after]/100
 ```
+
+---
+
+*Resume scores are estimates based on text pattern analysis. Scores reflect
+measurable signals (quantification, length, consistency) — not the full picture
+a human coach would see. Use scores as a guide for improvement, not as a hiring
+prediction.*
