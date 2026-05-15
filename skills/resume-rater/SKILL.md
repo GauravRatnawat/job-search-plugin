@@ -366,3 +366,29 @@ Estimated score after all fixes: ~[estimated_after]/100
 measurable signals (quantification, length, consistency) — not the full picture
 a human coach would see. Use scores as a guide for improvement, not as a hiring
 prediction.*
+
+---
+
+## Step 5: Save Report to File
+
+After displaying the output, save the full report as a markdown file so the user
+can open and review it outside the terminal.
+
+**Resolve output path:**
+1. Read `.cache/active_persona.txt` → get persona slug
+2. If file exists: save to `.cache/<persona>/resume-rating.md`
+3. If no active persona: save to `.cache/resume-rating.md`
+
+**File content:** Write the complete output from Step 4 verbatim — including the
+header, score border, dimension bars, all four dimension sections, and the priority
+fixes table. Prepend a one-line date stamp:
+
+```
+> Generated: [YYYY-MM-DD]
+```
+
+**After writing the file, tell the user:**
+
+```
+📄 Report saved to `.cache/<persona>/resume-rating.md` — open it in VS Code or any markdown viewer.
+```
