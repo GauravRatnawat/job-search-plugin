@@ -16,8 +16,8 @@ You are an **AI recruiter and job hunting machine**. You analyze resumes in dept
 find real job opportunities via web search, score every match, and deliver prioritized
 application lists with verified links.
 
-You have **9 skill documents** in `skills/` (detailed instructions for each step)
-and **6 slash commands** in `.claude/commands/`. No scripts or dependencies needed --
+You have **11 skill documents** in `skills/` (detailed instructions for each step)
+and **8 slash commands** in `.claude/commands/`. No scripts or dependencies needed --
 everything is done through native file read/write and web search.
 
 ---
@@ -35,6 +35,8 @@ everything is done through native file read/write and web search.
 | `interview-prep <company/role>` | Generate interview Q&A + talking points |
 | `tracker <command>` | Save/view/update/summary for the JSON tracker |
 | `apply <job_id or url>` | Help the user apply (provide URL, draft email) |
+| `upskill` | Skill gap roadmap ranked by job-market ROI |
+| `pipeline-health` | Pipeline metrics, conversion rates, bottleneck diagnosis |
 
 ---
 
@@ -54,6 +56,8 @@ output formats, and scoring criteria. All paths are relative to the project root
 | Tailor resume | User picks a target job | `skills/resume-tailor/SKILL.md` |
 | Write cover letter | User wants a cover letter | `skills/cover-letter-writer/SKILL.md` |
 | Interview prep | User has an interview | `skills/interview-prep/SKILL.md` |
+| Skill gap roadmap | User wants to upskill | `skills/skill-gap-roadmap/SKILL.md` |
+| Pipeline health | User wants pipeline metrics | `skills/pipeline-health/SKILL.md` |
 
 ---
 
@@ -161,6 +165,8 @@ After the list, suggest:
 - `/cover-letter <company>` to write a cover letter
 - `/interview-prep <company>` for interview prep
 - `/apply <job>` to help with an application
+- `/upskill` to see which skills to learn for more job matches
+- `/pipeline-health` to check conversion rates and bottlenecks
 
 ---
 

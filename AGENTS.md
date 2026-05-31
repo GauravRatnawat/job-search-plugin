@@ -74,6 +74,8 @@ Each step has a detailed instruction file. Read it before executing that step.
    - `skills/resume-tailor/SKILL.md` -- customize resume for a target job
    - `skills/cover-letter-writer/SKILL.md` -- write a personalized cover letter
    - `skills/interview-prep/SKILL.md` -- prepare for an interview
+   - `skills/skill-gap-roadmap/SKILL.md` -- prioritized skill learning roadmap
+   - `skills/pipeline-health/SKILL.md` -- pipeline metrics and bottleneck diagnosis
 
 ## Tracker
 
@@ -94,7 +96,7 @@ The tracker is a JSON file at `job_tracker.json`. Read `skills/application-track
 ## Project Structure
 
 ```
-skills/                          9 skill instruction documents (read as pipeline steps)
+skills/                          11 skill instruction documents (read as pipeline steps)
   resume-parser/SKILL.md
   job-hunter/SKILL.md
   job-searcher/SKILL.md
@@ -104,6 +106,8 @@ skills/                          9 skill instruction documents (read as pipeline
   resume-tailor/SKILL.md
   cover-letter-writer/SKILL.md
   interview-prep/SKILL.md
+  skill-gap-roadmap/SKILL.md
+  pipeline-health/SKILL.md
 .claude/commands/                Slash commands (Claude Code standalone)
 commands/                        Slash commands (Claude Code plugin)
 .claude-plugin/plugin.json       Claude Code plugin manifest
