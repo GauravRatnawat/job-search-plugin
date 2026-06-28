@@ -1,6 +1,7 @@
 ---
 name: job-scorer
 description: 5-dimension job fit scoring system. Evaluates skill match, experience level, description relevance, location, and title match to produce fit scores out of 100. Use when scoring jobs against a resume.
+capability: score
 ---
 
 # Skill: Job Scorer & Fit Analyzer

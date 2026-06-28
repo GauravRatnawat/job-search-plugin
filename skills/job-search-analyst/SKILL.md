@@ -1,6 +1,8 @@
 ---
 name: job-search-analyst
 description: Deduplicates, filters, and categorizes job search results against the candidate profile. Use after collecting raw job listings from web searches.
+capability: analyze
+subcapability: dedupe-filter
 ---
 
 # Skill: Job Search Analyst

@@ -1,6 +1,7 @@
 ---
 name: job-searcher
 description: Web search execution agent for finding real, current job openings across job boards and company career pages. Use when executing job search queries.
+capability: search
 ---
 
 # Skill: Job Searcher

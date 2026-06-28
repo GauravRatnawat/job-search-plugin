@@ -1,6 +1,7 @@
 ---
 name: resume-parser
 description: Deep resume analysis and strategic profile assessment. Use when the user provides a resume to parse, analyze skills, identify strengths/gaps, and generate target roles.
+capability: parse
 ---
 
 # Skill: Resume Parser & Profile Analyzer

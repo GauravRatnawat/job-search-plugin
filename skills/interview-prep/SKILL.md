@@ -1,6 +1,7 @@
 ---
 name: interview-prep
 description: Generates behavioral and technical interview questions with STAR-format answer frameworks using the candidate's actual experience. Use when preparing for an interview.
+capability: prep
 ---
 
 # Skill: Interview Prep

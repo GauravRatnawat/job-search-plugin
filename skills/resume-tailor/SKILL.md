@@ -1,6 +1,7 @@
 ---
 name: resume-tailor
 description: Rewrites and optimizes a resume for a specific job listing. Reorders skills, rephrases experience bullets, and adds ATS-friendly keywords. Use when tailoring a resume for a target role.
+capability: tailor
 ---
 
 # Skill: Resume Tailor

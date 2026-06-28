@@ -1,6 +1,7 @@
 ---
 name: cover-letter-writer
 description: Writes compelling, personalized cover letters under 400 words. Uses specific details from both the resume and job description. Use when writing a cover letter for a specific job.
+capability: write
 ---
 
 # Skill: Cover Letter Writer

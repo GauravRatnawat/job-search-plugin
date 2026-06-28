@@ -1,6 +1,8 @@
 ---
 name: resume-rater
 description: Score a resume against professional quality standards across Impact, Brevity, Style, and Sections. Returns overall score, dimension sub-scores, line-level feedback with rewrites, and prioritised fix list.
+capability: analyze
+subcapability: resume-quality
 ---
 
 # Skill: Resume Quality Rater

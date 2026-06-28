@@ -1,6 +1,8 @@
 ---
 name: market-analyzer
 description: Market compatibility analyzer. Evaluates a resume against a target role in a specific regional market (Berlin, Germany, DACH, Europe, Remote-EU). Checks language fit, CV format conventions, visa/work authorization, local certifications, stack preferences, salary benchmarks, cultural framing, and recommended job boards. Produces a 0-100 market-fit score with a priority fix list. Use when the user wants to assess resume readiness for a specific regional market.
+capability: analyze
+subcapability: regional-market
 ---
 
 # Skill: Market Compatibility Analyzer

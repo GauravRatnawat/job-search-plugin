@@ -1,6 +1,7 @@
 ---
 name: application-tracker
 description: Job application pipeline tracker using a JSON file. Manages job statuses (New, Applied, Interviewing, Offer, Rejected), scores, and notes. Use when saving, viewing, or updating tracked jobs.
+capability: track
 ---
 
 # Skill: Application Tracker

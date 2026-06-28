@@ -1,6 +1,7 @@
 ---
 name: job-hunter
 description: Proactive AI recruiter that generates multi-query search strategies and finds 20+ real job opportunities with verified application links. Use after resume analysis.
+capability: hunt
 ---
 
 # Skill: Job Hunter — AI Recruiter
