@@ -109,7 +109,7 @@ Read `.cache/active_persona.txt` and check each stage's cache file for freshness
 3. Use the `job-search:resume-parser` skill (or read `skills/resume-parser/SKILL.md` if in repo root) and follow its instructions.
 4. Output: structured profile + target roles + strengths/gaps.
 5. **Cache the result:** Write to `.cache/<persona>/profile.json`.
-   The persona slug is derived from the candidate's name.
+   The persona slug is derived from the candidate's name per the canonical algorithm in `AGENTS.md` AD-14 (handles ASCII, Latin-1 accents, CJK, empty names per the edge-case table).
 
 ### Step 2: Proactive Job Hunting
 1. **Check cache:** If `.cache/<persona>/search_results.json` is fresh, skip to Step 3.

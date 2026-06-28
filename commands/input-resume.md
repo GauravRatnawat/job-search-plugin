@@ -50,7 +50,7 @@ Read the resume at $ARGUMENTS (if it's a file path, use the Read tool; if it's p
 ### Step 1: Parse & Analyze
 1. Use the `job-search:resume-parser` skill and follow its instructions.
 2. Extract the full structured profile + strategic assessment.
-3. **Cache the result** — derive the persona slug from the candidate's name (e.g. "Gaurav Ratnawat" → `gaurav-ratnawat`):
+3. **Cache the result** — derive the persona slug from the candidate's name following the canonical algorithm in `AGENTS.md` (AD-14 — handles ASCII, Latin-1 accents, CJK, empty names per the edge-case table):
    - Create directory `.cache/<persona>/` if it doesn't exist
    - Write `.cache/<persona>/profile.json`:
      ```json

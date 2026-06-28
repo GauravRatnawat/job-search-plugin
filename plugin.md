@@ -72,7 +72,7 @@ At the start of every session:
 
 ### Multi-Persona Support
 
-Each candidate gets their own cache directory (`.cache/<persona-slug>/`). The persona slug is derived from the profile `name` field (e.g., "Gaurav Ratnawat" becomes `gaurav-ratnawat`).
+Each candidate gets their own cache directory (`.cache/<persona-slug>/`). The persona slug is derived from the profile `name` field per the canonical algorithm in `AGENTS.md` AD-14 (handles ASCII, Latin-1 accents, CJK, empty names per the edge-case table).
 
 - When saving a `profile` with no active persona, create the directory and write the slug to `.cache/active_persona.txt`
 - Switch between personas by writing a different slug to `.cache/active_persona.txt`

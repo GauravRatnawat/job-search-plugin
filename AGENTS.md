@@ -153,11 +153,32 @@ Cache files are stored in `.cache/<persona>/` as JSON. **Every cache file uses t
 
 Each candidate gets their own cache directory under `.cache/<persona-slug>/`. **Personas are hard-isolated** — a skill operating on persona A cannot read from `.cache/<persona-B>/` or `job_tracker.json` entries scoped to persona B (AD-15).
 
-**Persona slug derivation (AD-14):** lowercase the candidate name → replace any non-`[a-z0-9]` run with single `-` → trim leading/trailing `-`. A "run" is a maximal contiguous span of non-`[a-z0-9]` characters; so `"O' "` (apostrophe + space) is **one** run that collapses to a single `-`. Examples:
+**Persona slug derivation (AD-14):** the slug rule handles ASCII names directly and non-ASCII names via Unicode normalization. The full algorithm:
 
-- `"Gaurav Ratnawat"` → `gaurav-ratnawat`
-- `"Priya R. Sharma"` → `priya-r-sharma`
-- `"Anish O'Malley"` → `anish-o-malley`
+1. **Normalize.** Apply Unicode NFKD decomposition to separate base characters from combining marks (e.g. `"é"` → `"e" + combining-acute`).
+2. **Transliterate.** Drop all combining marks and any other non-Latin-script characters. Keep only ASCII letters, digits, and the original separators (space, hyphen, apostrophe, etc.).
+3. **Lowercase.** Convert remaining text to lowercase.
+4. **Collapse runs.** Replace any non-`[a-z0-9]` run (a maximal contiguous span of non-alphanumeric ASCII characters) with a single `-`.
+5. **Trim.** Strip leading and trailing `-`.
+6. **Validate.** If the result is non-empty, use it as the slug. If the result is empty (all characters dropped during step 2), fall back to `candidate-{hash8}` where `hash8` is the first 8 hex characters of a deterministic hash (e.g. SHA-1) of the original name string.
+7. **Empty-name guard.** If the input name is itself empty or whitespace-only, the orchestrator MUST halt and ask the user for guidance — never silently create an unidentifiable persona directory.
+
+Examples — including the non-ASCII edge cases that the previous wording could not handle:
+
+| Input | Slug | Notes |
+|---|---|---|
+| `"Gaurav Ratnawat"` | `gaurav-ratnawat` | ASCII baseline |
+| `"Priya R. Sharma"` | `priya-r-sharma` | period collapses as part of `" . "` run |
+| `"Anish O'Malley"` | `anish-o-malley` | apostrophe is one run; `o` between apostrophe and space is preserved |
+| `"María García"` | `maria-garcia` | NFKD strips combining acute |
+| `"Jean-Paul Sartre"` | `jean-paul-sartre` | existing hyphen counts as a run, collapses to single `-` |
+| `"John   Doe"` | `john-doe` | multiple spaces are one run |
+| `"李明"` | `candidate-{hash8}` | no Latin-script characters survive transliteration; deterministic fallback |
+| `"@@@"` | `candidate-{hash8}` | no alphanumerics survive; same fallback |
+| `"Anish 李"` | `anish-{hash8}` | partial Latin keeps the prefix; suffix-hash carries the rest |
+| `""` (empty) | ERROR | orchestrator halts, asks user |
+
+The `{hash8}` fallback is deterministic — same input always produces the same slug — so a candidate with a non-Latin-script name still gets a stable persona across sessions.
 
 **Active persona ownership (AD-16):** the orchestrator owns `active_persona.txt`. On first resume share with no active persona, the orchestrator derives the slug, creates `.cache/<slug>/`, writes `active_persona.txt`, and proceeds (FR-0.3 auto-bootstrap). Skills MUST NOT write `active_persona.txt`.
 
