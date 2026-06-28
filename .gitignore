@@ -26,3 +26,9 @@ PLAN.md
 
 # Git worktrees
 .worktrees/
+
+# BMad-Method (local install)
+_bmad/
+_bmad-output/
+.claude/skills/bmad-*
+.agents/
