@@ -489,7 +489,7 @@ body::before {
     <span>Job Search · Claude Code</span>
   </div>
   <div class="topbar-right">
-    <span>11 skills · 0 deps</span>
+    <span>12 skills · 0 deps</span>
     <a href="https://github.com/GauravRatnawat/job-search-plugin#readme">readme</a>
     <a class="back" href="https://gauravratnawat.com/">gauravratnawat.com</a>
   </div>
@@ -503,8 +503,8 @@ body::before {
       <p class="hero-body">An AI recruiter built for Claude Code. Parse your resume, find 20+ real jobs, score every match across five dimensions, and ship tailored applications — no APIs, no scripts, no setup.</p>
     </div>
     <div class="hero-foot">
-      <div class="hero-stat"><div class="n">11</div><div class="l">Skills</div></div>
-      <div class="hero-stat"><div class="n">9</div><div class="l">Commands</div></div>
+      <div class="hero-stat"><div class="n">12</div><div class="l">Skills</div></div>
+      <div class="hero-stat"><div class="n">10</div><div class="l">Commands</div></div>
       <div class="hero-stat"><div class="n">0</div><div class="l">Setup</div></div>
     </div>
   </div>
@@ -541,9 +541,9 @@ body::before {
 <section class="section">
   <div class="section-inner">
     <p class="label">01 — Commands</p>
-    <h2 class="section-title">Nine slash<br><em>commands</em></h2>
+    <h2 class="section-title">Ten slash<br><em>commands</em></h2>
     <div class="cmd-grid">
-      <div class="cmd-card"><div class="tag">Core</div><div class="name"><span class="s">/</span>input-resume</div><div class="desc">Full pipeline in one command. Parse resume, hunt 20+ jobs, score every listing, deliver a prioritised list.</div><span class="badge">entry point</span></div>
+      <div class="cmd-card"><div class="tag">Core</div><div class="name"><span class="s">/</span>input-resume</div><div class="desc">One command runs full search. Parse resume, hunt 20+ jobs, score each match, rank list. Save full report per persona in cache.</div><span class="badge">entry point</span></div>
       <div class="cmd-card"><div class="tag">Tailoring</div><div class="name"><span class="s">/</span>tailor-resume</div><div class="desc">Rewrite your resume for a specific role. Keyword-optimised, role-aligned, saved as a separate version.</div><span class="badge">per-job</span></div>
       <div class="cmd-card"><div class="tag">Tailoring</div><div class="name"><span class="s">/</span>cover-letter</div><div class="desc">Personalised cover letter under 400 words. Draws from parsed profile and the specific job's language.</div><span class="badge">&lt; 400 words</span></div>
       <div class="cmd-card"><div class="tag">ATS</div><div class="name"><span class="s">/</span>ats-check</div><div class="desc">Estimate ATS pass probability. Keywords, section headers, formatting, title alignment — all scored.</div><span class="badge new">new</span></div>
@@ -552,6 +552,7 @@ body::before {
       <div class="cmd-card"><div class="tag">Apply</div><div class="name"><span class="s">/</span>apply</div><div class="desc">Look up a job by ID or URL. Get the link plus a drafted outreach email as a local file. Never auto-submits.</div><span class="badge">local draft</span></div>
       <div class="cmd-card"><div class="tag">TUI</div><div class="name"><span class="s">/</span>view</div><div class="desc">Interactive terminal browser for scored jobs. Scroll listings, open links, update status — powered by <code style="font-family:var(--mono);font-size:.85em">gum</code>. Optional grade filter: <code style="font-family:var(--mono);font-size:.85em">/view A</code>.</div><span class="badge">requires gum</span></div>
       <div class="cmd-card"><div class="tag">Market</div><div class="name"><span class="s">/</span>market-check</div><div class="desc">Score resume fit for Berlin, DACH, Netherlands, or broader EU markets. Checks language, visa, stack preferences, salary benchmarks, and local job boards across 8 dimensions.</div><span class="badge new">beta</span></div>
+      <div class="cmd-card"><div class="tag">Analysis</div><div class="name"><span class="s">/</span>rate-resume</div><div class="desc">Score resume: Impact, Brevity, Style, Sections. Get overall score, line rewrites, and ranked fix list. Save full rating report per persona in cache.</div><span class="badge new">new</span></div>
     </div>
   </div>
 </section>
@@ -663,7 +664,7 @@ body::before {
     <div class="cta-layout">
       <div class="cta-left">
         <h3 class="cta-h">Claude Code<br><em>CLI</em></h3>
-        <p class="cta-body">Clone and link as a skill. All 9 slash commands become available immediately in any session.</p>
+        <p class="cta-body">Clone and link as skill. Use slash commands in Claude Code.</p>
         <div class="code-block"><span class="c">git</span> clone github.com/GauravRatnawat/job-search-plugin
 <span class="c">ln</span> -sf "$(pwd)/skill" ~/.claude/skills/job-search-plugin</div>
         <div class="code-block"><span class="cm"># In any Claude Code session:</span>
